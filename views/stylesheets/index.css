@@ -1,0 +1,24 @@
+html {
+	height: 100%;
+}
+
+@font-face {
+	font-family: 'font-awesome';
+	src: url("fonts/FontAwesome.ttf") format("opentype");
+}
+
+#index-content {
+	width: 100%;
+	height: calc(100% - 210px);
+	overflow: auto;
+}
+
+#index-header {
+	background-color: #800000;
+	color: #fff;
+	height: 200px;
+}
+
+#index-header button {
+	color: black;
+}

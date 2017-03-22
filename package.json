@@ -1,0 +1,30 @@
+{
+  "name": "studyassistron",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolas-mosch/StudyAssistron.git"
+  },
+  "author": "Nicolas Morew",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicolas-mosch/StudyAssistron/issues"
+  },
+  "homepage": "https://github.com/nicolas-mosch/StudyAssistron#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "electron": "^1.6.2",
+    "handlebars-layouts": "^3.1.4",
+    "jquery": "^3.1.1",
+    "mathjax": "^2.7.0",
+    "nconf": "^0.8.4",
+    "nedb": "^1.8.0"
+  }
+}
