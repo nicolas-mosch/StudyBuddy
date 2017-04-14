@@ -17,11 +17,13 @@
     "url": "https://github.com/nicolas-mosch/StudyAssistron/issues"
   },
   "homepage": "https://github.com/nicolas-mosch/StudyAssistron#readme",
-  "devDependencies": {},
+  "devDependencies": {
+    "electron-packager": "^8.6.0"
+  },
   "dependencies": {
     "bootstrap": "^3.3.7",
     "electron": "^1.6.2",
-    "handlebars-layouts": "^3.1.4",
+    "handlebars": "^4.0.6",
     "jquery": "^3.1.1",
     "mathjax": "^2.7.0",
     "nconf": "^0.8.4",

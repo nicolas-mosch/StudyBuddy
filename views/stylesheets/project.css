@@ -1,8 +1,36 @@
+html, body {
+  min-height: 100% !important;
+  height: 100%;
+  overflow: hidden;
+}
+
+
 #project-table{
-  width: 80%;
-  margin: 0 auto
+  width: 85%;
+  margin: 0 auto;
 }
 
 #new-tuple{
   margin: 0 auto;
+}
+
+#project-container{
+  height: 100%;
+  width: 100%;
+}
+
+#project-table-container{
+  width: 100%;
+  max-height: calc(100% - 80px);
+  text-align: center;
+  overflow: auto;
+}
+
+#new-tuple{
+  margin: 0 auto;
+}
+
+.content-cell
+{
+  width: 45%;
 }

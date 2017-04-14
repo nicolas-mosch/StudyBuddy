@@ -8,7 +8,7 @@ const {
     ipcMain
 } = require('electron');
 const configuration = require('./configuration.js');
-
+const fs = require('fs');
 // Windows
 var mainWindow = null;
 
@@ -16,35 +16,181 @@ var mainWindow = null;
 
 
 var template = [{
-    label: 'File',
-    submenu: [{
-            label: 'New Q&A Set',
-            accelerator: 'CmdOrCtrl+n',
-            click: function(item, focusedWindow) {
-                mainWindow.loadURL('file://' + __dirname + '/views/layouts/project.html');
+        label: 'File',
+        submenu: [{
+                label: 'Open DevTools',
+                accelerator: 'F12',
+                click: function(item, focusedWindow) {
+                    mainWindow.webContents.openDevTools();
+                }
+            },
+            {
+                label: 'Exit',
+                accelerator: 'CmdOrCtrl+Esc',
+                click: function(item, focusedWindow) {
+                    mainWindow.close();
+                }
             }
-        }, {
-            label: 'Open DevTools',
-            accelerator: 'F12',
-            click: function(item, focusedWindow) {
-                mainWindow.webContents.openDevTools();
+        ]
+    },
+    {
+        label: 'Projects',
+        submenu: [{
+                label: 'New Project',
+                accelerator: 'CmdOrCtrl+p',
+                click: function(item, focusedWindow) {
+                    mainWindow.loadURL('file://' + __dirname + '/views/layouts/project.html');
+                }
+            },
+            {
+                label: 'Open Project',
+                accelerator: 'CmdOrCtrl+o',
+                click: function(item, focusedWindow) {
+                    var path = dialog.showOpenDialog({
+                        title: 'Open Q&A Set',
+                        defaultPath: '.',
+                        filters: [{
+                            name: 'StudyAssistron Project',
+                            extensions: ['sap']
+                        }],
+                        properties: ['openFile']
+                    });
+
+                    if(!path){
+                      return;
+                    }
+
+                    var fileContents = fs.readFileSync(path[0], "utf-8");
+                    var fileName = path[0].split('\\');
+                    fileName = fileName[fileName.length - 1];
+
+                    mainWindow.webContents.on('did-finish-load', function() {
+                        mainWindow.webContents.send('load-project', JSON.parse(fileContents), fileName);
+                    });
+
+                    mainWindow.loadURL('file://' + __dirname + '/views/layouts/project.html');
+
+                }
             }
-        },
-        {
-            label: 'Exit',
-            accelerator: 'CmdOrCtrl+Esc',
-            click: function(item, focusedWindow) {
-                mainWindow.close();
+        ]
+    },
+    {
+        label: 'Quiz',
+        submenu: [{
+                label: 'New Quiz',
+                accelerator: 'CmdOrCtrl+q',
+                click: function(item, focusedWindow) {
+                  var path = dialog.showOpenDialog({
+                      title: 'New Quiz of Project',
+                      defaultPath: '.',
+                      filters: [{
+                          name: 'StudyAssistron Project',
+                          extensions: ['sap']
+                      }],
+                      properties: ['openFile']
+                  });
+
+                  if(!path){
+                    return;
+                  }
+
+                  var fileContents = fs.readFileSync(path[0], "utf-8");
+
+                  mainWindow.webContents.on('did-finish-load', function() {
+                      mainWindow.webContents.send('new-quiz', JSON.parse(fileContents));
+                  });
+                  mainWindow.loadURL('file://' + __dirname + '/views/layouts/quiz.html');
+                }
+            },
+            {
+                label: 'Load Quiz',
+                accelerator: 'CmdOrCtrl+l',
+                click: function(item, focusedWindow) {
+                  var path = dialog.showOpenDialog({
+                      title: 'Load Quiz',
+                      defaultPath: '.',
+                      filters: [{
+                          name: 'StudyAssistron Quiz',
+                          extensions: ['saq']
+                      }],
+                      properties: ['openFile']
+                  });
+
+                  if(!path){
+                    return;
+                  }
+
+                  var fileContents = fs.readFileSync(path[0], "utf-8");
+                  var fileName = path[0].split('\\');
+                  fileName = fileName[fileName.length - 1];
+
+                  mainWindow.webContents.on('did-finish-load', function() {
+                      mainWindow.webContents.send('load-quiz', JSON.parse(fileContents), fileName);
+                  });
+
+                  mainWindow.loadURL('file://' + __dirname + '/views/layouts/quiz.html');
+                }
             }
-        }
-    ]
-}, {
-    label: 'Preferences',
-    submenu: []
-}];
+        ]
+    },
+    {
+        label: 'Preferences',
+        submenu: []
+    }
+];
 
 ipcMain.on('new-project', function() {
     mainWindow.loadURL('file://' + __dirname + '/views/layouts/project.html');
+});
+
+ipcMain.on('save-quiz', function(message, quiz) {
+  //  TODO: save button should save to open quiz directly if one is open
+
+    var path = dialog.showSaveDialog({
+        title: 'Save Quiz'
+    });
+
+    if(!path){
+      return;
+    }
+
+    if (!path.endsWith('.saq')) {
+        path += '.saq';
+    }
+
+    fs.writeFile(path, JSON.stringify(quiz), function(inError) {
+        if (inError) {
+            console.error(inError);
+            return;
+        }
+        // TODO: Add notifications to frontend
+        console.log('Quiz Saved');
+    });
+});
+
+ipcMain.on('save-project', function(message, project) {
+  //  TODO: save button should save to open project directly if one is open
+
+    var path = dialog.showSaveDialog({
+        title: 'Save Project'
+    });
+
+    if(!path){
+      return;
+    }
+
+    if (!path.endsWith('.sap')) {
+        path += '.sap';
+    }
+
+    fs.writeFile(path, JSON.stringify(project), function(inError) {
+        if (inError) {
+            console.error(inError);
+            return;
+        }
+        // TODO: Add notifications to frontend
+        console.log('Project Saved');
+    });
 });
 
 // Quit when all windows are closed.

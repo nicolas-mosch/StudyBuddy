@@ -1,0 +1,43 @@
+<tbody>
+{{#each tuples}}
+  <tr>
+    <td class="content-cell">
+      {{{q}}}
+    </td>
+    <td>
+      <button
+       class="edit-tuple"
+       type="button"
+       class="btn"
+       data-index="{{@index}}"
+       data-type="q"
+       title="Edit Question"
+      >
+        <span class="glyphicon glyphicon-edit"></span>
+      </button>
+      <button
+       class="delete-tuple"
+       type="button"
+       class="btn"
+       data-index="{{@index}}"
+       title="Delete Pair"
+      >
+        <span class="glyphicon glyphicon-remove-sign"></span>
+      </button>
+      <button
+       class="edit-tuple"
+       type="button"
+       class="btn"
+       data-index="{{@index}}"
+       data-type="a"
+       title="Edit Answer"
+      >
+        <span class="glyphicon glyphicon-edit"></span>
+      </button>
+    </td>
+    <td class="content-cell">
+      {{{a}}}
+    </td>
+  </tr>
+{{/each}}
+</tbody>
