@@ -9,7 +9,7 @@ Download the latest build if you want to use the application or clone the reposi
 ## Builds
 
 ```
-v0.1
+[v0.1 (windows)](https://github.com/nicolas-mosch/StudyAssistron/releases/download/0.1/StudyAssistron-win32-x64-v-0-1.zip)
 ```
 
 ### Prerequisites
@@ -39,16 +39,16 @@ npm start
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://gist.github.com/StudyAssistron/404) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
 
 ## Authors
 
-* **Nicolas Morew** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Nicolas Morew**
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/StudyAssistron/404) who participated in this project.
 
 ## License
 

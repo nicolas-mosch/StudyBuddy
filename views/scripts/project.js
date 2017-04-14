@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var handlebars = require('handlebars');
 var fs = require('fs');
+var path = require('path');
 
 global.jQuery = $;
 window.$ = $;
@@ -9,7 +10,7 @@ require('bootstrap');
 
 const ipc = require("electron").ipcRenderer;
 
-var template = handlebars.compile(fs.readFileSync('views/templates/projectTableBody.hbs', 'utf8'));
+var template = handlebars.compile(fs.readFileSync(path.resolve(__dirname, '../templates/projectTableBody.hbs'), 'utf8'));
 var project = [];
 var editingIndex = -1;
 var editingField = null;

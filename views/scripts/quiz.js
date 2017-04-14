@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var handlebars = require('handlebars');
 var fs = require('fs');
+var path = require('path');
 
 global.jQuery = $;
 window.$ = $;
@@ -9,7 +10,7 @@ require('bootstrap');
 
 const ipc = require("electron").ipcRenderer;
 
-var buttonsTemplate = handlebars.compile(fs.readFileSync('views/templates/quizButtons.hbs', 'utf8'));
+var buttonsTemplate = handlebars.compile(fs.readFileSync(path.resolve(__dirname, '../templates/quizButtons.hbs'), 'utf8'));
 
 var quiz;
 
