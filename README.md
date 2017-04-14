@@ -8,9 +8,7 @@ Download the latest build if you want to use the application or clone the reposi
 
 ## Builds
 
-```
 [v0.1 (windows)](https://github.com/nicolas-mosch/StudyAssistron/releases/download/0.1/StudyAssistron-win32-x64-v-0-1.zip)
-```
 
 ### Prerequisites
 
