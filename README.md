@@ -4,11 +4,13 @@ A tool to help you create flashcard-like question-answer sets for the subject yo
 
 ## Getting Started
 
-Download the latest build if you want to use the application or clone the repository if you want to work on it.
+Download the latest release if you want to use the application or clone the repository if you want to work on it.
 
-## Builds
+## Releases
 
 [v0.1 (windows)](https://github.com/nicolas-mosch/StudyAssistron/releases/download/0.1/StudyAssistron-win32-x64-v-0-1.zip)
+[All Releases](https://github.com/nicolas-mosch/StudyAssistron/releases/download/0.1/StudyAssistron-win32-x64-v-0-1.zip)
+
 
 ### Prerequisites
 

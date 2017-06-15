@@ -7,11 +7,11 @@ const {
     dialog,
     ipcMain
 } = require('electron');
-const configuration = require('./configuration.js');
+const configuration = require('./controllers/configuration.js');
 const fs = require('fs');
 // Windows
 var mainWindow = null;
-
+var updater = require('./controllers/updater');
 
 
 
@@ -134,8 +134,13 @@ var template = [{
         ]
     },
     {
-        label: 'Preferences',
-        submenu: []
+        label: 'Settings',
+        submenu: [
+          {
+              label: 'Check for updates',
+              click: updater.checkForUpdates
+          }
+        ]
     }
 ];
 

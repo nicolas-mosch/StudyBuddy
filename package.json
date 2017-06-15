@@ -1,31 +1,35 @@
 {
   "name": "studyassistron",
   "version": "0.0.1",
-  "description": "",
+  "description": "A tool to help you create flashcard-like question-answer sets for any subject, and quiz yourself.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pack": "build --dir",
+    "dist": "build",
+    "release": "build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nicolas-mosch/StudyAssistron.git"
   },
   "author": "Nicolas Morew",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/nicolas-mosch/StudyAssistron/issues"
   },
   "homepage": "https://github.com/nicolas-mosch/StudyAssistron#readme",
   "devDependencies": {
-    "electron-packager": "^8.6.0"
+    "electron": "^1.6.2",
+    "electron-builder": "^18.6.2"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "electron": "^1.6.2",
+    "electron-updater": "^2.2.2",
     "handlebars": "^4.0.6",
     "jquery": "^3.1.1",
-    "mathjax": "^2.7.0",
+    "mathjax": "^2.7.1",
     "nconf": "^0.8.4",
     "nedb": "^1.8.0"
   }
