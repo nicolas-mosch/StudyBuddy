@@ -1,21 +1,19 @@
 <tbody>
 {{#each tuples}}
   <tr>
-    <td class="content-cell">
+    <td
+     class="content-cell edit-tuple"
+     data-index="{{@index}}"
+     data-type="q"
+     title="Edit Question"
+    >
       {{{q}}}
     </td>
     <td>
       <button
-       class="edit-tuple"
-       type="button"
-       class="btn"
-       data-index="{{@index}}"
-       data-type="q"
-       title="Edit Question"
-      >
-        <span class="glyphicon glyphicon-edit"></span>
-      </button>
-      <button
+       data-toggle="confirmation"
+       data-popout="true"
+       data-singleton="true"
        class="delete-tuple"
        type="button"
        class="btn"
@@ -24,18 +22,13 @@
       >
         <span class="glyphicon glyphicon-remove-sign"></span>
       </button>
-      <button
-       class="edit-tuple"
-       type="button"
-       class="btn"
-       data-index="{{@index}}"
-       data-type="a"
-       title="Edit Answer"
-      >
-        <span class="glyphicon glyphicon-edit"></span>
-      </button>
     </td>
-    <td class="content-cell">
+    <td
+     class="content-cell edit-tuple"
+     data-index="{{@index}}"
+     data-type="a"
+     title="Edit Answer"
+    >
       {{{a}}}
     </td>
   </tr>

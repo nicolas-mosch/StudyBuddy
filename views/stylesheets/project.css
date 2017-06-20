@@ -32,5 +32,12 @@ html, body {
 
 .content-cell
 {
-  width: 45%;
+  width: 48%;
+  overflow: auto;
+  cursor: url(./../../resources/edit.png) 2 2, pointer;
+}
+
+.content-cell:hover
+{
+  background-color: #e7fff9;
 }

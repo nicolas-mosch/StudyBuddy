@@ -8,7 +8,7 @@ Download the latest release if you want to use the application or clone the repo
 
 ## Releases
 
-[v0.1 (windows)](https://github.com/nicolas-mosch/StudyAssistron/releases/download/v0.0.1/studyassistron-setup-0.0.1.exe)
+[v0.0.1 (windows)](https://github.com/nicolas-mosch/StudyAssistron/releases/download/v0.0.1/studyassistron-setup-0.0.1.exe)
 
 [All Releases](https://github.com/nicolas-mosch/StudyAssistron/releases)
 

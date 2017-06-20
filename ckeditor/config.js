@@ -11,4 +11,9 @@ CKEDITOR.editorConfig = function( config ) {
 	config.extraPlugins = 'eqneditor,easykeymap,mathjax,widget,lineutils,widgetselection,base64image';
 	config.mathJaxLib = '../../node_modules/mathjax/MathJax.js?config=TeX-AMS_HTML';
 	config.removeButtons = 'Image';
+	config.keystrokes = [
+		[ CKEDITOR.CTRL + 83 /*S*/, 'save' ],
+		[ 27 /*Esc*/, 'blur' ]
+	];
+    
 };
