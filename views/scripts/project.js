@@ -23,6 +23,14 @@ ipc.on('load-project', function(event, inProject, name) {
     renderProjectTable();
 });
 
+ipc.on('new-project', function(){
+  project = [];
+  editingIndex = -1;
+  editingField = null;
+  $(".navbar-brand").html("New Project");
+  $('#project-table').html("");
+});
+
 
 $(document).ready(function() {
     CKEDITOR.on('instanceReady', function(ev) {
@@ -100,7 +108,6 @@ function renderProjectTable() {
     var tableBody = template({
         tuples: project
     });
-
 
     $('#project-table').html(tableBody);
     $('#tuple-count').html(project.length);

@@ -39,6 +39,9 @@ var template = [{
                 label: 'New Project',
                 accelerator: 'CmdOrCtrl+p',
                 click: function(item, focusedWindow) {
+                    mainWindow.webContents.on('did-finish-load', function() {
+                        mainWindow.webContents.send('new-project');
+                    });
                     mainWindow.loadURL('file://' + __dirname + '/views/layouts/project.html');
                 }
             },
@@ -221,8 +224,21 @@ app.on('ready', function() {
     //mainWindow.webContents.openDevTools();
 
     // Emitted when the window is closed.
+    mainWindow.on('close', function(e) {
+      var choice = dialog.showMessageBox(this,
+        {
+          type: 'question',
+          buttons: ['Yes', 'No'],
+          title: 'Confirm',
+          message: 'You might have unsaved changes in your project or quiz.\nAre you sure you want to exit StudyAssistron?'
+       });
+       if(choice == 1){
+         e.preventDefault();
+       }
+    });
+
     mainWindow.on('closed', function() {
-        legendWindow = null;
-        mainWindow = null;
+      legendWindow = null;
+      mainWindow = null;
     });
 });
