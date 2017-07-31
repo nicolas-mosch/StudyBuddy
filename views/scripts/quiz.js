@@ -18,6 +18,7 @@ function setNewCurrentTuple() {
     if(!quiz.remainingTupleIDs.length){
       renderFinishedQuiz();
     }
+    CKEDITOR.instances.editor.setData("");
 
     quiz.currentTupleID = quiz.remainingTupleIDs[
         Math.floor(Math.random() * (quiz.remainingTupleIDs.length))

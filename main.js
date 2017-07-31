@@ -83,24 +83,29 @@ var template = [{
                 label: 'New Quiz',
                 accelerator: 'CmdOrCtrl+q',
                 click: function(item, focusedWindow) {
-                  var path = dialog.showOpenDialog({
-                      title: 'New Quiz of Project',
+                  var paths = dialog.showOpenDialog({
+                      title: 'New Quiz of Project(s)',
                       defaultPath: '.',
                       filters: [{
                           name: 'StudyAssistron Project',
                           extensions: ['sap']
                       }],
-                      properties: ['openFile']
+                      properties: ['openFile', 'multiSelections']
                   });
 
-                  if(!path){
+                  if(!paths || !paths.length){
                     return;
                   }
 
-                  var fileContents = fs.readFileSync(path[0], "utf-8");
+                  var allQuestions = [];
+                  for(var i = 0; i < paths.length; i++){
+                    allQuestions = allQuestions.concat(JSON.parse(fs.readFileSync(paths[i], "utf-8")));
+                  }
+
+
 
                   mainWindow.webContents.on('did-finish-load', function() {
-                      mainWindow.webContents.send('new-quiz', JSON.parse(fileContents));
+                      mainWindow.webContents.send('new-quiz', allQuestions);
                   });
                   mainWindow.loadURL('file://' + __dirname + '/views/layouts/quiz.html');
                 }
