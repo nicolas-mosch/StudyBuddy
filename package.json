@@ -1,6 +1,6 @@
 {
   "name": "studyassistron",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A tool to help you create flashcard-like question-answer sets for any subject, and quiz yourself.",
   "main": "main.js",
   "scripts": {
@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/nicolas-mosch/StudyAssistron#readme",
   "devDependencies": {
-    "electron": "^1.6.2",
-    "electron-builder": "^18.6.2"
+    "electron": "^1.6.2"
+    //,"electron-builder": "^18.6.2"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
