@@ -10,6 +10,14 @@
     "dist": "build",
     "release": "build"
   },
+  "build": {
+    "win": {
+      "icon": "resources/icon"
+    },
+    "mac": {
+      "icon": "resources/icon"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nicolas-mosch/StudyAssistron.git"
@@ -21,8 +29,8 @@
   },
   "homepage": "https://github.com/nicolas-mosch/StudyAssistron#readme",
   "devDependencies": {
-    "electron": "^1.6.2"
-    //,"electron-builder": "^18.6.2"
+    "electron": "^1.6.2",
+    "electron-builder": "^18.6.2"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
