@@ -1,0 +1,63 @@
+.math-buttons-table-container .category-button img{
+  max-height: 30px;
+  max-width: 40px;
+  margin: 0 auto;
+}
+
+.category-button {
+  margin: 3px;
+}
+
+.math-buttons-table-container label{
+  display: block;
+  margin: 0px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.math-buttons-table-container .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 99;
+    border-radius: 4px;
+}
+
+/* Show the dropdown menu on hover */
+.math-buttons-table-container .category-button:hover > .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.math-buttons-table-container .dropdown-content td:no(.divider):hover {
+    background-color: #3e8e41;
+}
+
+.math-buttons-table-container .dropdown-content td:not(.divider){
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.math-buttons-table-container .dropdown-content table{
+  margin: 0 auto;
+}
+
+.math-buttons-table-container .dropdown-content td.divider{
+  font-size:12px;
+  text-align: left;
+  background-color:light-gray;
+}
+
+.math-buttons-table-container .dropdown-content td img{
+  max-height: 22px;
+  max-width: 22px;
+  margin: 0 auto;
+}
+
+#latex-content{
+  border: 2px solid gray;
+  border-radius: 3px;
+}
