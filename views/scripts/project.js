@@ -65,7 +65,7 @@ $(document).ready(function() {
 
     // Add row to table
     $('#project-container').delegate('#new-tuple', 'click', function() {
-        project.push({q: "", a: ""});
+        project.push({q: "", a: "", p: ""});
         renderProjectTable();
     });
 
@@ -85,6 +85,10 @@ $(document).ready(function() {
         console.log(CKEDITOR.instances.editor.commands);
     });
 
+    $('#save-project').on('click', function() {
+        ipc.send('save-project', project);
+    });
+
     /*
     $(document).keypress(
         function(e) {
@@ -100,10 +104,6 @@ $(document).ready(function() {
         }
     );
     */
-
-    $('#save-project').on('click', function() {
-        ipc.send('save-project', project);
-    })
 });
 
 
