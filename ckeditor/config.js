@@ -8,12 +8,13 @@ CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here. For example:
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
-	config.extraPlugins = 'eqneditor,easykeymap,mathjax,widget,lineutils,widgetselection,base64image,pastebase64,codesnippet';
+	config.extraPlugins = 'eqneditor,easykeymap,mathjax,widget,lineutils,widgetselection,base64image,pastebase64,codesnippet,tooltip';
 	config.mathJaxLib = '../../node_modules/mathjax/MathJax.js?config=TeX-AMS_HTML';
 	config.removeButtons = 'Image';
 	config.keystrokes = [
 		[ CKEDITOR.CTRL + 83 /*S*/, 'save' ],
 		[ 27 /*Esc*/, 'blur' ]
 	];
+	config.tooltip_html = false;
     
 };

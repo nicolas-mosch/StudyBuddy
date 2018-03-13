@@ -84,6 +84,8 @@ $(document).ready(function() {
         CKEDITOR.instances.editor.setData(project[editingIndex][editingField]);
         console.log(CKEDITOR.instances.editor.commands);
     });
+
+    /*
     $(document).keypress(
         function(e) {
             if (e.which === 113) { // press q
@@ -97,6 +99,7 @@ $(document).ready(function() {
             }
         }
     );
+    */
 
     $('#save-project').on('click', function() {
         ipc.send('save-project', project);
