@@ -18,12 +18,12 @@ function setNewCurrentTuple() {
     if(!quiz.remainingTupleIDs.length){
       renderFinishedQuiz();
     }
-    CKEDITOR.instances.editor.setData("");
 
     quiz.currentTupleID = quiz.remainingTupleIDs[
         Math.floor(Math.random() * (quiz.remainingTupleIDs.length))
     ];
     quiz.currentDisplayType = 'q';
+    CKEDITOR.instances.editor.setData(quiz.allTuples[quiz.currentTupleID].p || "");
 }
 
 function renderTuple() {

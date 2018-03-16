@@ -14,13 +14,23 @@
        data-toggle="confirmation"
        data-popout="true"
        data-singleton="true"
-       class="delete-tuple"
+       class="delete-tuple btn"
        type="button"
-       class="btn"
        data-index="{{@index}}"
        title="Delete Pair"
       >
         <span class="glyphicon glyphicon-remove-sign"></span>
+      </button>
+      <br />
+      <br />
+      <button
+       class="edit-tuple btn"
+       type="button"
+       data-type="p"
+       data-index="{{@index}}"
+       title="Edid predefined answer"
+      >
+        <span class="glyphicon glyphicon-list-alt"></span>
       </button>
     </td>
     <td
