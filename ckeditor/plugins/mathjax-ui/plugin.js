@@ -1,37 +1,31 @@
-/* 
+/*
  Equation Editor Plugin for CKEditor v4
- Version 1.4
+ Version 2.1
 
  This plugin allows equations to be created and edited from within CKEditor.
  For more information goto: http://www.codecogs.com/latex/integration/ckeditor_v4/install.php
- 
+
  Copyright CodeCogs 2006-2013
  Written by Will Bateman.
 */
+
 CKEDITOR.plugins.add( 'eqneditor', {
 	availableLangs:{en:1},
 	lang : "en",
 	requires: [ 'dialog' ],
 	icons: "eqneditor",
-	
+
 	init : function(editor)
-	{		
-	  var host='latex.codecogs.com';
-	  var http=('https:' == document.location.protocol ? 'https://' : 'http://');
-			
-		// First make sure we have loaded the necessary scripts
-  	CKEDITOR.scriptLoader.load( [
-		http+host+'/js/eq_config.js', 
-		http+host+'/js/eq_editor-lite-17.js',
-		]);
-		
-		// Load Additional CSS 
-		var fileref=document.createElement("link");
-		fileref.setAttribute("rel", "stylesheet");
-		fileref.setAttribute("type", "text/css");
-		fileref.setAttribute("href", http+host+'/eqneditor/css/equation-embed.css');
-		document.getElementsByTagName("head")[0].appendChild(fileref);
-	
+	{
+
+		var cls = editor.config.mathJaxClass || 'math-tex';
+
+		if ( !editor.config.mathJaxLib ) {
+			CKEDITOR.error( 'mathjax-no-config' );
+		}
+
+		editor.addContentsCss( this.path + 'css/style.css' );
+
 		var pluginCmd='eqneditorDialog';
 
 		// Add the link and unlink buttons.
@@ -41,13 +35,22 @@ CKEDITOR.plugins.add( 'eqneditor', {
 				requiredContent: 'img[src,alt]'
 			})
 		);
-		
-		CKEDITOR.dialog.add(pluginCmd, this.path+"dialogs/eqneditor.js");
-				
+
+		CKEDITOR.dialog.add(pluginCmd, this.path+"dialogs/mathjax-ui.js");
+
+		// Add MathJax script to page preview.
+		editor.on( 'contentPreview', function( evt ) {
+			evt.data.dataValue = evt.data.dataValue.replace(
+				/<\/head>/,
+				'<script src="' + CKEDITOR.getUrl( editor.config.mathJaxLib ) + '"><\/script><\/head>'
+			);
+		} );
+
+
 		editor.ui.addButton( 'EqnEditor', {
 			label : editor.lang.eqneditor.toolbar,
 			command : pluginCmd,
-			icon: this.path + 'icons/eqneditor.png',
+			icon: this.path + 'icons/mathjax-ui.png',
 			toolbar: 'insert'
 		});
 
@@ -61,7 +64,7 @@ CKEDITOR.plugins.add( 'eqneditor', {
 				command : pluginCmd,
 				group : editor.lang.eqneditor.menu
 			});
-			
+
 			// if the selected item is image of class 'mathImg',
 			// we shold be interested in it
 			editor.contextMenu.addListener( function(element) {
@@ -69,34 +72,30 @@ CKEDITOR.plugins.add( 'eqneditor', {
 				if (element.getAscendant('img', true))
 				{
 					var sName = element.getAttribute('src').match( /(gif|svg)\.latex\?(.*)/ );
-					if(sName!=null)	
+					if(sName!=null)
 					{
 						res['eqneditor'] = CKEDITOR.TRISTATE_OFF;
 						return res;
 					}
 				}
 			});
-			
-		}	
-		
-		editor.on( 'doubleclick', function(evt) 
+		}
+
+		editor.on( 'doubleclick', function(evt)
 		{
 			var element = evt.data.element;
-			if (element && element.is('img')) 
+			if (element && element.is('img'))
 			{
 				var sName = element.getAttribute('src').match( /(gif|svg)\.latex\?(.*)/ );
 				if(sName!=null)
 				{
 					evt.data.dialog = pluginCmd;
-					evt.cancelBubble = true; 
+					evt.cancelBubble = true;
 					evt.returnValue = false;
-					evt.stop();	
+					evt.stop();
 				}
 			}
 		}, null, null, 1);
-		
-	}	
+
+	}
 });
-
-	
-
