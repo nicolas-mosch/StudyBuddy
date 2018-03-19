@@ -17,6 +17,7 @@ var quiz;
 function setNewCurrentTuple() {
     if(!quiz.remainingTupleIDs.length){
       renderFinishedQuiz();
+      return;
     }
 
     quiz.currentTupleID = quiz.remainingTupleIDs[
@@ -31,6 +32,11 @@ function renderTuple() {
   $('#toggle-qa').data('display', quiz.currentDisplayType);
   $('#toggle-qa').html(quiz.currentDisplayType === 'q' ? 'Show Answer' : 'Show Question')
   $('#question-count').html((quiz.allTuples.length - quiz.remainingTupleIDs.length) + "/" + quiz.allTuples.length);
+  $('span.source-info').tooltip({ //balise.yourClass if you custom plugin
+    effect: 'slide',
+    trigger: "hover", //This is fine if you have links into tooltip
+    html: true, //Set false if you disable ckeditor textarea
+  });
 }
 
 function renderFinishedQuiz(){
