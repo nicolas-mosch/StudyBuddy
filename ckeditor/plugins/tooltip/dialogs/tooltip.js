@@ -53,7 +53,8 @@ CKEDITOR.dialog.add('tooltipDialog', function(editor) {
 
               element.setAttribute("title", this.getValue());
               element.setAttribute("data-cke-saved-title", this.getValue());
-
+			  element.setAttribute("data-toggle", "tooltip");
+			  element.setAttribute("data-html", "true");
             },
             onShow: function() {
               if (editor.config.tooltip_html === true)

@@ -56,6 +56,11 @@ $(document).ready(function() {
                 // Replace this with your desired save button code
                 project[editingIndex][editingField] = editor.document.getBody().getHtml();
                 renderProjectTable();
+				$('span.source-info').tooltip({ //balise.yourClass if you custom plugin
+					effect: 'slide',
+					trigger: "hover", //This is fine if you have links into tooltip
+					html: true, //Set false if you disable ckeditor textarea
+				});
             }
         });
         // Replace the old save's exec function with the new one
