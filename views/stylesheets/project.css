@@ -5,11 +5,6 @@ html, body {
 }
 
 
-#project-table{
-  width: 85%;
-  margin: 0 auto;
-}
-
 #new-tuple{
   margin: 0 auto;
 }
@@ -36,7 +31,6 @@ html, body {
 
 .content-cell
 {
-  width: 48%;
   overflow: auto;
   cursor: url(./../../resources/edit.png) 2 2, pointer;
 }
