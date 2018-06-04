@@ -11,9 +11,9 @@
 }
 
 #qa-container{
-  height: 100%;
+  height: 45vh;
   overflow: auto;
-  
+  font-size: 22px;
 }
 
 html{

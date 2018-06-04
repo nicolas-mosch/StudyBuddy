@@ -37,7 +37,6 @@ var template = [{
         label: 'Projects',
         submenu: [{
                 label: 'New Project',
-                accelerator: 'CmdOrCtrl+p',
                 click: function(item, focusedWindow) {
                     mainWindow.webContents.on('did-finish-load', function() {
                         mainWindow.webContents.send('new-project');
@@ -47,7 +46,6 @@ var template = [{
             },
             {
                 label: 'Open Project',
-                accelerator: 'CmdOrCtrl+o',
                 click: function(item, focusedWindow) {
                     var path = dialog.showOpenDialog({
                         title: 'Open Q&A Set',
@@ -81,7 +79,6 @@ var template = [{
         label: 'Quiz',
         submenu: [{
                 label: 'New Quiz',
-                accelerator: 'CmdOrCtrl+q',
                 click: function(item, focusedWindow) {
                   var paths = dialog.showOpenDialog({
                       title: 'New Quiz of Project(s)',
@@ -112,7 +109,6 @@ var template = [{
             },
             {
                 label: 'Load Quiz',
-                accelerator: 'CmdOrCtrl+l',
                 click: function(item, focusedWindow) {
                   var path = dialog.showOpenDialog({
                       title: 'Load Quiz',
