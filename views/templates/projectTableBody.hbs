@@ -1,15 +1,14 @@
-<tbody>
 {{#each tuples}}
-  <tr>
-    <td
-     class="content-cell edit-tuple"
+  <div class="row">
+    <div
+     class="content-cell edit-tuple col-sm-5"
      data-index="{{@index}}"
      data-type="q"
      title="Edit Question"
     >
       {{{q}}}
-    </td>
-    <td>
+    </div>
+    <div clas="col-sm-2">
       <button
        data-toggle="confirmation"
        data-popout="true"
@@ -30,15 +29,14 @@
       >
         <span class="glyphicon glyphicon-list-alt"></span>
       </button>
-    </td>
-    <td
-     class="content-cell edit-tuple"
+    </div>
+    <div
+     class="content-cell edit-tuple col-sm-5"
      data-index="{{@index}}"
      data-type="a"
      title="Edit Answer"
     >
       {{{a}}}
-    </td>
-  </tr>
+    </div>
+  </div>
 {{/each}}
-</tbody>
