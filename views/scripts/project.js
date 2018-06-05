@@ -12,7 +12,7 @@ const ipc = require("electron").ipcRenderer;
 
 var template = handlebars.compile(fs.readFileSync(path.resolve(__dirname, '../templates/projectTableBody.hbs'), 'utf8'));
 var project = [];
-var editingIndex = -1;
+var editingIndex, editingChapter = -1;
 var editingField = null;
 
 ipc.on('load-project', function(event, inProject, name) {
@@ -54,8 +54,8 @@ $(document).ready(function() {
         var overridecmd = new CKEDITOR.command(editor, {
             exec: function(editor) {
                 // Replace this with your desired save button code
-                project[editingIndex][editingField] = editor.document.getBody().getHtml();
-                renderProjectTable();
+                project[editingChapter].tuples[editingIndex][editingField] = editor.document.getBody().getHtml();
+                renderProjectTable(editingChapter);
 				$('span.source-info').tooltip({ //balise.yourClass if you custom plugin
 					effect: 'slide',
 					trigger: "hover", //This is fine if you have links into tooltip
@@ -68,25 +68,32 @@ $(document).ready(function() {
     });
     CKEDITOR.replace('editor');
 
-    // Add row to table
-    $('#project-container').delegate('#new-tuple', 'click', function() {
-        project.push({q: "", a: "", p: ""});
-        renderProjectTable();
+    // Add chapter to table
+    $('#project-container').delegate('#new-chapter', 'click', function() {
+        project.push({title: $("#new-chapter-title").val(), tuples: []});
+        renderProjectTable(project.length - 1);
     });
 
-    // Remove row from table
+    // Add tuple to table
+    $('#project-container').delegate('#new-tuple', 'click', function() {
+        project[$(this).data('chapter-index')].tuples.push({q: "", a: "", p: ""});
+        renderProjectTable($(this).data('chapter-index'));
+    });
+
+    // Remove tuple from table
     $('#project-container').delegate('.delete-tuple', 'click', function(e) {
-        project.splice(parseInt($(this).data('index')), 1);
-        renderProjectTable();
+        project[$(this).data('chapter-index')].tuples.splice(parseInt($(this).data('index')), 1);
+        renderProjectTable($(this).data('chapter-index'));
     });
 
     // Edit a tuple
     $('#project-container').delegate('.edit-tuple', 'click', function() {
         editingIndex = parseInt($(this).data('index'));
         editingField = $(this).data('type');
+        editingChapter = parseInt($(this).data('chapter-index'));
 
         $('#content-edit-modal').modal('show');
-        CKEDITOR.instances.editor.setData(project[editingIndex][editingField]);
+        CKEDITOR.instances.editor.setData(project[editingChapter].tuples[editingIndex][editingField]);
         console.log(CKEDITOR.instances.editor.commands);
     });
 
@@ -112,13 +119,20 @@ $(document).ready(function() {
 });
 
 
-function renderProjectTable() {
+function renderProjectTable(displayedChapterIndex) {
     var tableBody = template({
-        tuples: project
+        displayedChapter: displayedChapterIndex,
+        chapters: project
     });
 
+    var tupleCount = 0;
+    project.forEach(function(chapter, index){tupleCount += chapter.tuples.length})
+
+
+
     $('#project-table').html(tableBody);
-    $('#tuple-count').html(project.length);
+    $('#chapter_' + displayedChapterIndex).addClass("in");
+    $('#tuple-count').html(tupleCount);
 
     // Initialize confirmation for delete buttons
     $('[data-toggle=confirmation]').confirmation({

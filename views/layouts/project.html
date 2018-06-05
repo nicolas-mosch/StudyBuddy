@@ -34,11 +34,15 @@
 
     </nav>
 
-    <div class="container" id="project-table-container">
-        <div id="project-table" class="container"></div>
+    <div id="project-table-container">
+        <div id="project-table"></div>
         <br />
-        <button id="new-tuple" type="button" class="btn" title="New Tuple (n)"><span class="glyphicon glyphicon-plus"></span></button>
-
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Chapter title" id="new-chapter-title">
+          <span class="input-group-btn" style="width:0;">
+              <button id="new-chapter" class="btn btn-default" type="button">Add</button>
+          </span>
+      </div>
     </div>
   </div>
   <!-- Modal -->

@@ -33,6 +33,7 @@ html, body {
 {
   overflow: auto;
   cursor: url(./../../resources/edit.png) 2 2, pointer;
+  width: 45%;
 }
 
 .content-cell:hover
