@@ -3,7 +3,11 @@
   <div class="panel panel-default" style="width: 100%;">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#chapter_{{@index}}">{{title}} <span class="badge">{{tuples.length}}</span></a>
+        <span class="rename-chapter glyphicon glyphicon-edit" data-chapter-index="{{@index}}"></span>
+        <span class="save-chapter-name glyphicon glyphicon-floppy-disk" data-chapter-index="{{@index}}" style="display: none"></span>
+        <a data-toggle="collapse" data-parent="#accordion" href="#chapter_{{@index}}" id="chapter-title-{{@index}}"> {{title}} </a>
+        <input type="text" placeholder="{{title}}" id="edit-chapter-{{@index}}" style="display: none" />
+        <span class="badge">{{tuples.length}}</span>
       </h4>
     </div>
     <div id="chapter_{{@index}}" class="panel-collapse collapse" style="width: 100%;">

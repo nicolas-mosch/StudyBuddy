@@ -47,15 +47,17 @@ function renderFinishedQuiz(){
 
 ipc.on('new-quiz', function(event, inProject) {
     quiz = {
-        allTuples: inProject,
+        allTuples: inProject.map(function(o){return o.tuples}).reduce((accumulator, currentValue) => accumulator.concat(currentValue)),
         remainingTupleIDs: [],
         history: [],
         currentTupleID: -1,
         currentDisplayType: 'q'
     };
-
+    var c = 0;
     for (var i in inProject) {
-        quiz.remainingTupleIDs.push(i);
+      for(var j in inProject[i]){
+        quiz.remainingTupleIDs.push(c++);
+      }
     }
 
     setNewCurrentTuple();

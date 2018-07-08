@@ -101,6 +101,28 @@ $(document).ready(function() {
         ipc.send('save-project', project);
     });
 
+    // Rename a chapter
+    $('#project-container').delegate('.rename-chapter', 'click', function() {
+        const chapterIndex = parseInt($(this).data('chapter-index'));
+        $(this).hide();
+        $('.save-chapter-name[data-chapter-index="'+chapterIndex+'"]').show()
+        $("#chapter-title-" + chapterIndex).hide();
+        $("#edit-chapter-" + chapterIndex).show();
+    });
+
+    $('#project-container').delegate('.save-chapter-name', 'click', function() {
+        const chapterIndex = parseInt($(this).data('chapter-index'));
+        const newTitle = $("#edit-chapter-" + chapterIndex).val();
+        project[chapterIndex].title = newTitle;
+        $(this).hide();
+        $("#edit-chapter-" + chapterIndex).hide();
+        $("#edit-chapter-" + chapterIndex).val("");
+        $("#chapter-title-" + chapterIndex).html(newTitle);
+        $("#chapter-title-" + chapterIndex).show();
+        $('.rename-chapter[data-chapter-index="'+chapterIndex+'"]').show()
+
+    });
+
     /*
     $(document).keypress(
         function(e) {
