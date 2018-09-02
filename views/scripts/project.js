@@ -20,7 +20,7 @@ ipc.on('load-project', function(event, inProject, name) {
 
     $(".navbar-brand").html(name);
 
-    renderProjectTable();
+    renderProjectTable(project);
 });
 
 ipc.on('new-project', function(){
@@ -55,7 +55,7 @@ $(document).ready(function() {
             exec: function(editor) {
                 // Replace this with your desired save button code
                 project[editingChapter].tuples[editingIndex][editingField] = editor.document.getBody().getHtml();
-                renderProjectTable(editingChapter);
+                renderProjectTable(project, editingChapter);
 				$('span.source-info').tooltip({ //balise.yourClass if you custom plugin
 					effect: 'slide',
 					trigger: "hover", //This is fine if you have links into tooltip
@@ -71,19 +71,19 @@ $(document).ready(function() {
     // Add chapter to table
     $('#project-container').delegate('#new-chapter', 'click', function() {
         project.push({title: $("#new-chapter-title").val(), tuples: []});
-        renderProjectTable(project.length - 1);
+        renderProjectTable(project, project.length - 1);
     });
 
     // Add tuple to table
     $('#project-container').delegate('#new-tuple', 'click', function() {
         project[$(this).data('chapter-index')].tuples.push({q: "", a: "", p: ""});
-        renderProjectTable($(this).data('chapter-index'));
+        renderProjectTable(project, $(this).data('chapter-index'));
     });
 
     // Remove tuple from table
     $('#project-container').delegate('.delete-tuple', 'click', function(e) {
         project[$(this).data('chapter-index')].tuples.splice(parseInt($(this).data('index')), 1);
-        renderProjectTable($(this).data('chapter-index'));
+        renderProjectTable(project, $(this).data('chapter-index'));
     });
 
     // Edit a tuple
@@ -123,6 +123,27 @@ $(document).ready(function() {
 
     });
 
+    // filter
+    $('#project-container').delegate('#search', 'click', function() {
+      var filter = $("#search-input").val();
+      if(filter.length > 0){
+        var filteredProject = [];
+        var filteredChapterTuples;
+        for(var i = 0; i < project.length; i++){
+          filteredChapterTuples = project[i].tuples.filter(function(tuple){
+            return tuple.a.includes(filter) || tuple.q.includes(filter);
+          });
+          if(filteredChapterTuples.length){
+            filteredProject.push({title: project[i].title, tuples: filteredChapterTuples});
+          }
+        }
+        renderProjectTable(filteredProject);
+      }
+      else{
+        renderProjectTable(project);
+      }
+    });
+
     /*
     $(document).keypress(
         function(e) {
@@ -141,7 +162,7 @@ $(document).ready(function() {
 });
 
 
-function renderProjectTable(displayedChapterIndex) {
+function renderProjectTable(project, displayedChapterIndex) {
     var tableBody = template({
         displayedChapter: displayedChapterIndex,
         chapters: project

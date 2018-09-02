@@ -1,0 +1,8 @@
+<select multiple class="form-control" id="chapterSelection" style="height: 80%;font-size: 25px;">
+  {{#each chapters}}
+  <option value="{{@index}}">
+    {{title}} ({{tuples.length}})
+  </option>
+  {{/each}}
+</select>
+<button id="start-quiz" type="button" class="btn btn-success pull-right">Start Quiz</button>

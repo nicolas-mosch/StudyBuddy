@@ -7,12 +7,24 @@ global.jQuery = $;
 window.$ = $;
 require('bootstrap');
 
+const chapterSelectionTemplate = handlebars.compile(
+  fs.readFileSync(
+    path.resolve(__dirname, '../templates/quizChapterSelection.hbs'),
+    'utf8'
+  )
+);
+
+const quizQuestionTemplate = handlebars.compile(
+  fs.readFileSync(
+    path.resolve(__dirname, '../templates/quizQuestion.hbs'),
+    'utf8'
+  )
+);
 
 const ipc = require("electron").ipcRenderer;
 
-var buttonsTemplate = handlebars.compile(fs.readFileSync(path.resolve(__dirname, '../templates/quizButtons.hbs'), 'utf8'));
 
-var quiz;
+var quiz, project;
 
 function setNewCurrentTuple() {
     if(!quiz.remainingTupleIDs.length){
@@ -46,23 +58,12 @@ function renderFinishedQuiz(){
 
 
 ipc.on('new-quiz', function(event, inProject) {
-    quiz = {
-        allTuples: inProject.map(function(o){return o.tuples}).reduce((accumulator, currentValue) => accumulator.concat(currentValue)),
-        remainingTupleIDs: [],
-        history: [],
-        currentTupleID: -1,
-        currentDisplayType: 'q'
-    };
-    var c = 0;
-    for (var i in inProject) {
-      for(var j in inProject[i]){
-        quiz.remainingTupleIDs.push(c++);
-      }
-    }
-
-    setNewCurrentTuple();
-
-    renderTuple();
+    project = inProject;
+    $('#quiz-container').html(
+      chapterSelectionTemplate({
+          chapters: inProject
+      })
+    );
 });
 
 ipc.on('load-quiz', function(event, inQuiz, name) {
@@ -72,9 +73,6 @@ ipc.on('load-quiz', function(event, inQuiz, name) {
 });
 
 $(document).ready(function() {
-
-    CKEDITOR.replace('editor');
-
     $('#quiz-container').delegate('#toggle-qa', 'click', function() {
         if ($(this).data('display') === 'q') {
             quiz.currentDisplayType = 'a';
@@ -82,7 +80,6 @@ $(document).ready(function() {
         else{
           quiz.currentDisplayType = 'q';
         }
-
         renderTuple();
     });
 
@@ -101,12 +98,39 @@ $(document).ready(function() {
 
     // Edit a tuple
     $('#quiz-container').delegate('#incorrect', 'click', function() {
-      console.log('incorrect');
-
       quiz.history.push({
         tupleID: quiz.currentTupleID,
         correct: false
       });
+      setNewCurrentTuple();
+      renderTuple();
+    });
+
+    // start quiz
+    $('#quiz-container').delegate('#start-quiz', 'click', function() {
+      const selectedChapters =  $("#chapterSelection").val();
+      quiz = {
+          allTuples: project
+          .filter(
+            (o, i) => {return selectedChapters.includes("" + i)}
+          ).map(
+            (o) => {return o.tuples}
+          ).reduce(
+            (accumulatedTuples, currentTuple) => accumulatedTuples.concat(currentTuple)
+          ),
+          remainingTupleIDs: [],
+          history: [],
+          currentTupleID: -1,
+          currentDisplayType: 'q'
+      };
+      for (var i in quiz.allTuples) {
+        quiz.remainingTupleIDs.push(i);
+      }
+      $('#quiz-container').html(
+        quizQuestionTemplate({})
+      );
+
+      CKEDITOR.replace('editor');
       setNewCurrentTuple();
       renderTuple();
     });
