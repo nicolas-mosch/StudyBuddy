@@ -69,6 +69,11 @@ ipc.on('new-quiz', function(event, inProject) {
 ipc.on('load-quiz', function(event, inQuiz, name) {
     quiz = inQuiz;
     $(".navbar-brand").html(name);
+    $('#quiz-container').html(
+      quizQuestionTemplate({})
+    );
+
+    CKEDITOR.replace('editor');
     renderTuple();
 });
 

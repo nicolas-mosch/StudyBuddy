@@ -6,12 +6,8 @@
   height: 100%;
 }
 
-#quiz-table tr{
-  height: 50%;
-}
-
 #qa-container{
-  height: 45vh;
+  max-height: 30vh;
   overflow: auto;
   font-size: 22px;
 }
