@@ -125,13 +125,23 @@ $(document).ready(function() {
 
     // filter
     $('#project-container').delegate('#search', 'click', function() {
-      var filter = $("#search-input").val();
+      var filter = $("#search-input").val().replace(/(ä)/ig, "&auml;").replace(/(ö)/ig, "&ouml;").replace(/(ü)/ig, "&uuml;");
+      console.log("filter", filter);
       if(filter.length > 0){
         var filteredProject = [];
         var filteredChapterTuples;
+        var aToText, qToText;
         for(var i = 0; i < project.length; i++){
           filteredChapterTuples = project[i].tuples.filter(function(tuple){
-            return tuple.a.includes(filter) || tuple.q.includes(filter);
+            aToText = tuple.a.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ");
+            qToText = tuple.q.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ");
+            
+            if(qToText.includes(filter)){
+                console.log(qToText);
+            }
+
+            return tuple.a.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ").includes(filter)
+            || tuple.q.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ").includes(filter);
           });
           if(filteredChapterTuples.length){
             filteredProject.push({title: project[i].title, tuples: filteredChapterTuples});

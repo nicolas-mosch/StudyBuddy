@@ -72,12 +72,37 @@ ipc.on('load-quiz', function(event, inQuiz, name) {
     $('#quiz-container').html(
       quizQuestionTemplate({})
     );
+    CKEDITOR.on('instanceReady', function(ev) {
+      // bootstrap-ckeditor-modal-fix.js
+      // hack to fix ckeditor/bootstrap compatiability bug when ckeditor appears in a bootstrap modal dialog
 
+      $.fn.modal.Constructor.prototype.enforceFocus = function() {
+          modal_this = this
+          $(document).on('focusin.modal', function(e) {
+              if (
+                  modal_this.$element[0] !== e.target
+                  && !modal_this.$element.has(e.target).length
+                  && $(e.target.parentNode).hasClass('cke_contents cke_reset')) {
+                  modal_this.$element.focus()
+              }
+          })
+      };
+
+      // Create a new command with the desired exec function
+      var editor = ev.editor;
+      var overridecmd = new CKEDITOR.command(editor, {
+          exec: function(editor) {}
+      });
+      // Replace the old save's exec function with the new one
+      ev.editor.commands.save.exec = overridecmd.exec;
+    });
     CKEDITOR.replace('editor');
     renderTuple();
 });
 
 $(document).ready(function() {
+
+  
     $('#quiz-container').delegate('#toggle-qa', 'click', function() {
         if ($(this).data('display') === 'q') {
             quiz.currentDisplayType = 'a';
@@ -135,6 +160,30 @@ $(document).ready(function() {
         quizQuestionTemplate({})
       );
 
+      CKEDITOR.on('instanceReady', function(ev) {
+        // bootstrap-ckeditor-modal-fix.js
+        // hack to fix ckeditor/bootstrap compatiability bug when ckeditor appears in a bootstrap modal dialog
+
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {
+            modal_this = this
+            $(document).on('focusin.modal', function(e) {
+                if (
+                    modal_this.$element[0] !== e.target
+                    && !modal_this.$element.has(e.target).length
+                    && $(e.target.parentNode).hasClass('cke_contents cke_reset')) {
+                    modal_this.$element.focus()
+                }
+            })
+        };
+
+        // Create a new command with the desired exec function
+        var editor = ev.editor;
+        var overridecmd = new CKEDITOR.command(editor, {
+            exec: function(editor) {}
+        });
+        // Replace the old save's exec function with the new one
+        ev.editor.commands.save.exec = overridecmd.exec;
+      });
       CKEDITOR.replace('editor');
       setNewCurrentTuple();
       renderTuple();
