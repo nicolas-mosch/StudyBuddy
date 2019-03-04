@@ -66,7 +66,7 @@ var template = [{
                     fileName = fileName[fileName.length - 1];
 
                     mainWindow.webContents.on('did-finish-load', function() {
-                        mainWindow.webContents.send('load-project', JSON.parse(fileContents), fileName);
+                        mainWindow.webContents.send('load-project', JSON.parse(fileContents), fileName, path[0]);
                     });
 
                     mainWindow.loadURL('file://' + __dirname + '/views/layouts/project.html');
@@ -177,12 +177,13 @@ ipcMain.on('save-quiz', function(message, quiz) {
     });
 });
 
-ipcMain.on('save-project', function(message, project) {
+ipcMain.on('save-project', function(message, project, path) {
   //  TODO: save button should save to open project directly if one is open
-
-    var path = dialog.showSaveDialog({
-        title: 'Save Project'
-    });
+    if(path == null){
+        path = dialog.showSaveDialog({
+            title: 'Save Project'
+        });
+    }
 
     if(!path){
       return;
@@ -197,8 +198,7 @@ ipcMain.on('save-project', function(message, project) {
             console.error(inError);
             return;
         }
-        // TODO: Add notifications to frontend
-        console.log('Project Saved');
+        mainWindow.webContents.send('confirm-project-saved');
     });
 });
 

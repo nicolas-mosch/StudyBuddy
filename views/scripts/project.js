@@ -14,9 +14,16 @@ var template = handlebars.compile(fs.readFileSync(path.resolve(__dirname, '../te
 var project = [];
 var editingIndex, editingChapter = -1;
 var editingField = null;
+var projectPath = null;
 
-ipc.on('load-project', function(event, inProject, name) {
+ipc.on('confirm-project-saved', function(){
+    $('#save-project span').removeClass('glyphicon-floppy');
+    $('#save-project span').addClass('glyphicon-floppy-saved');
+});
+
+ipc.on('load-project', function(event, inProject, name, inProjectPath) {
     project = inProject;
+    projectPath = inProjectPath;
 
     $(".navbar-brand").html(name);
 
@@ -30,6 +37,11 @@ ipc.on('new-project', function(){
   $(".navbar-brand").html("New Project");
   $('#project-table').html("");
 });
+
+function displayUnsavedChangesIcon(){
+    $('#save-project span').removeClass('glyphicon-floppy-saved');
+    $('#save-project span').addClass('glyphicon-floppy');
+}
 
 
 $(document).ready(function() {
@@ -60,7 +72,8 @@ $(document).ready(function() {
 					effect: 'slide',
 					trigger: "hover", //This is fine if you have links into tooltip
 					html: true, //Set false if you disable ckeditor textarea
-				});
+                });
+                displayUnsavedChangesIcon();
             }
         });
         // Replace the old save's exec function with the new one
@@ -72,18 +85,21 @@ $(document).ready(function() {
     $('#project-container').delegate('#new-chapter', 'click', function() {
         project.push({title: $("#new-chapter-title").val(), tuples: []});
         renderProjectTable(project, project.length - 1);
+        displayUnsavedChangesIcon();
     });
 
     // Add tuple to table
     $('#project-container').delegate('#new-tuple', 'click', function() {
         project[$(this).data('chapter-index')].tuples.push({q: "", a: "", p: ""});
         renderProjectTable(project, $(this).data('chapter-index'));
+        displayUnsavedChangesIcon();
     });
 
     // Remove tuple from table
     $('#project-container').delegate('.delete-tuple', 'click', function(e) {
         project[$(this).data('chapter-index')].tuples.splice(parseInt($(this).data('index')), 1);
         renderProjectTable(project, $(this).data('chapter-index'));
+        displayUnsavedChangesIcon();
     });
 
     // Edit a tuple
@@ -98,7 +114,7 @@ $(document).ready(function() {
     });
 
     $('#save-project').on('click', function() {
-        ipc.send('save-project', project);
+        ipc.send('save-project', project, projectPath);
     });
 
     // Rename a chapter
@@ -120,7 +136,7 @@ $(document).ready(function() {
         $("#chapter-title-" + chapterIndex).html(newTitle);
         $("#chapter-title-" + chapterIndex).show();
         $('.rename-chapter[data-chapter-index="'+chapterIndex+'"]').show()
-
+        displayUnsavedChangesIcon();
     });
 
     // filter
@@ -170,7 +186,6 @@ $(document).ready(function() {
     );
     */
 });
-
 
 function renderProjectTable(project, displayedChapterIndex) {
     var tableBody = template({
