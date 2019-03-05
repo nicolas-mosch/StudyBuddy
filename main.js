@@ -5,8 +5,10 @@ const {
     Menu,
     MenuItem,
     dialog,
-    ipcMain
+    ipcMain,
+    globalShortcut
 } = require('electron');
+
 const configuration = require('./controllers/configuration.js');
 const fs = require('fs');
 // Windows
@@ -218,6 +220,11 @@ app.on('ready', function() {
         width: 800,
         height: 600
     });
+
+    // add F5 reload shortcut for reloading window
+    globalShortcut.register('f5', function() {
+		mainWindow.reload();
+	})
 
     // and load the index.html of the app.
     mainWindow.loadURL('file://' + __dirname + '/views/layouts/index.html');
