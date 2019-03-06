@@ -65,7 +65,7 @@ var template = [{
 
                     var fileContents = fs.readFileSync(path[0], "utf-8");
                     var fileName = path[0].split('\\');
-                    fileName = fileName[fileName.length - 1];
+                    fileName = fileName[fileName.length - 1].split('.')[0];
 
                     mainWindow.webContents.on('did-finish-load', function() {
                         mainWindow.webContents.send('load-project', JSON.parse(fileContents), fileName, path[0]);

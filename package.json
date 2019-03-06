@@ -1,6 +1,7 @@
 {
   "name": "studyassistron",
-  "version": "0.0.2",
+  "productName": "Study Buddy",
+  "version": "0.0.3",
   "description": "A tool to help you create flashcard-like question-answer sets for any subject, and quiz yourself.",
   "main": "main.js",
   "scripts": {
@@ -29,7 +30,8 @@
   },
   "homepage": "https://github.com/nicolas-mosch/StudyAssistron#readme",
   "devDependencies": {
-    "electron": "^1.6.2"
+    "electron": "^1.6.2",
+    "electron-installer-windows": "^1.1.1"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",

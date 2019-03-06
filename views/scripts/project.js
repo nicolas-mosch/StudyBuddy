@@ -25,7 +25,7 @@ ipc.on('load-project', function(event, inProject, name, inProjectPath) {
     project = inProject;
     projectPath = inProjectPath;
 
-    $(".navbar-brand").html(name);
+    $("#project-title").html(name);
 
     renderProjectTable(project);
 });
