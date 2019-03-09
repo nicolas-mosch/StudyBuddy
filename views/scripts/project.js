@@ -27,6 +27,19 @@ ipc.on('load-project', function(event, inProject, name, inProjectPath) {
 
     $("#project-title").html(name);
 
+    // add tuple-id's to old projects
+    var i, j, chapter, tuple;
+    for(i = 0; i < project.length; i++){
+        chapter = project[i];
+        if (!('currentTupleId' in chapter)){
+            chapter.currentTupleId = 0;
+            for(j = 0; j < chapter.tuples.length; j++){
+                chapter.tuples[j].id = chapter.currentTupleId++;
+            }
+        }
+    }
+    console.log(project);
+
     renderProjectTable(project);
 });
 
@@ -83,34 +96,38 @@ $(document).ready(function() {
 
     // Add chapter to table
     $('#project-container').delegate('#new-chapter', 'click', function() {
-        project.push({title: $("#new-chapter-title").val(), tuples: []});
+        project.push({title: $("#new-chapter-title").val(), tuples: [], currentTupleId: 0});
         renderProjectTable(project, project.length - 1);
         displayUnsavedChangesIcon();
     });
 
     // Add tuple to table
     $('#project-container').delegate('#new-tuple', 'click', function() {
-        project[$(this).data('chapter-index')].tuples.push({q: "", a: "", p: ""});
-        renderProjectTable(project, $(this).data('chapter-index'));
+        var chapterIndex = $(this).closest('.chapter-container').data('chapter-index');
+        project[chapterIndex].tuples.push({q: "", a: "", p: "", id: project[chapterIndex].currentTupleId++});
+        renderProjectTable(project, chapterIndex);
         displayUnsavedChangesIcon();
     });
 
     // Remove tuple from table
     $('#project-container').delegate('.delete-tuple', 'click', function(e) {
-        project[$(this).data('chapter-index')].tuples.splice(parseInt($(this).data('index')), 1);
+        var chapterIndex = $(this).closest('.chapter-container').data('chapter-index');
+        var tupleId = $(this).closest('.tuple-row').data('tuple-id');
+        project[chapterIndex].tuples = project[chapterIndex].tuples.filter(tuple => tuple.id !== tupleId);
+
         renderProjectTable(project, $(this).data('chapter-index'));
         displayUnsavedChangesIcon();
     });
 
     // Edit a tuple
     $('#project-container').delegate('.edit-tuple', 'click', function() {
-        editingIndex = parseInt($(this).data('index'));
+        var tupleId = $(this).closest('.tuple-row').data('tuple-id');
+        editingChapter = $(this).closest('.chapter-container').data('chapter-index');
         editingField = $(this).data('type');
-        editingChapter = parseInt($(this).data('chapter-index'));
+        editingIndex = project[editingChapter].tuples.findIndex(tuple => tuple.id === tupleId);
 
         $('#content-edit-modal').modal('show');
         CKEDITOR.instances.editor.setData(project[editingChapter].tuples[editingIndex][editingField]);
-        console.log(CKEDITOR.instances.editor.commands);
     });
 
     $('#save-project').on('click', function() {
@@ -142,26 +159,24 @@ $(document).ready(function() {
     // filter
     $('#project-container').delegate('#search', 'click', function() {
       var filter = $("#search-input").val().replace(/(ä)/ig, "&auml;").replace(/(ö)/ig, "&ouml;").replace(/(ü)/ig, "&uuml;");
-      console.log("filter", filter);
+      
       if(filter.length > 0){
         var filteredProject = [];
         var filteredChapterTuples;
         var aToText, qToText;
         for(var i = 0; i < project.length; i++){
-          filteredChapterTuples = project[i].tuples.filter(function(tuple){
-            aToText = tuple.a.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ");
-            qToText = tuple.q.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ");
-            
-            if(qToText.includes(filter)){
-                console.log(qToText);
-            }
+            filteredChapterTuples = project[i].tuples.filter(function(tuple){
+                aToText = tuple.a.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ");
+                qToText = tuple.q.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ");
+                
+                if(qToText.includes(filter)){
+                    console.log(qToText);
+                }
 
-            return tuple.a.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ").includes(filter)
-            || tuple.q.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ").includes(filter);
-          });
-          if(filteredChapterTuples.length){
+                return tuple.a.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ").includes(filter)
+                || tuple.q.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ").includes(filter);
+            });
             filteredProject.push({title: project[i].title, tuples: filteredChapterTuples});
-          }
         }
         renderProjectTable(filteredProject);
       }

@@ -10,15 +10,13 @@
         <span class="badge">{{tuples.length}}</span>
       </h4>
     </div>
-    <div id="chapter_{{@index}}" class="panel-collapse collapse" style="width: 100%;">
+    <div id="chapter_{{@index}}" class="panel-collapse collapse chapter-container" data-chapter-index="{{@index}}" style="width: 100%;">
       <div class="panel-body" style="width: 100%;">
         <table class="chapter-table" style="width: 100%;">
           {{#each tuples}}
-            <tr>
+            <tr data-tuple-id="{{id}}" class="tuple-row">
               <td
                class="content-cell edit-tuple"
-               data-index="{{@index}}"
-               data-chapter-index="{{@../index}}"
                data-type="q"
                title="Edit Question"
               >
@@ -31,8 +29,6 @@
                  data-singleton="true"
                  class="delete-tuple btn"
                  type="button"
-                 data-index="{{@index}}"
-                 data-chapter-index="{{@../index}}"
                  title="Delete Pair"
                 >
                   <span class="glyphicon glyphicon-remove-sign"></span>
@@ -41,8 +37,6 @@
                  class="edit-tuple btn"
                  type="button"
                  data-type="p"
-                 data-index="{{@index}}"
-                 data-chapter-index="{{@../index}}"
                  title="Edid predefined answer"
                 >
                   <span class="glyphicon glyphicon-list-alt"></span>
@@ -50,8 +44,6 @@
               </td>
               <td
                class="content-cell edit-tuple"
-               data-index="{{@index}}"
-               data-chapter-index="{{@../index}}"
                data-type="a"
                title="Edit Answer"
               >

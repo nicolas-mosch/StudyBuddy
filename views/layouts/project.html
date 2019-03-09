@@ -16,21 +16,20 @@
 <body>
   <div id="project-container">
     <header class="row" style="background-color: black;">
-        <div class="col-xs-2" style="text-align: left; font-size: 25px;line-height:55px;color: white; padding-left: 25px;">
-            <p id="project-title">New Project</p>
-        </div>
-        <div class="col-xs-1" style="text-align: left; font-size: 25px;line-height:55px;">
-            <a id="save-project">
+        <div class="col-xs-2" style="text-align: left; font-size: 25px;line-height:55px;padding-left:25px;">
+            <a id="save-project" style="float:left;">
                 <span class="glyphicon glyphicon-floppy-disk"></span>
             </a>
-        </div>
-        <div class="col-xs-8">
-            <div class="input-group" style="max-width: 250px; margin-top: 8px;">
+            <div class="input-group" style="max-width: 250px; float:left; padding-left: 15px; margin-top: 8px">
                 <input type="text" class="form-control" placeholder="Search for..." id="search-input" />
                 <span class="input-group-addon" id="search"><i class="glyphicon glyphicon-search"></i></span>
             </div>
         </div>
-        <div class="col-xs-1" style="text-align: right; font-size: 25px;line-height:55px;">
+        <div class="col-xs-8" style="text-align: center; font-size: 25px;line-height:55px;color: white; padding-left: 25px;">
+            <p id="project-title">New Project</p>
+        </div>
+
+        <div class="col-xs-2" style="text-align: right; font-size: 25px;line-height:55px;">
             <p>
                 <span class="label label-default" id="tuple-count">0</span>
             </p>
