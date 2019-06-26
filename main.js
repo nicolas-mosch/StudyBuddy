@@ -222,7 +222,7 @@ app.on('ready', function() {
     });
 
     // add F5 reload shortcut for reloading window
-    globalShortcut.register('f5', function() {
+    globalShortcut.register('CmdOrCtrl+f5', function() {
 		mainWindow.reload();
 	})
 
