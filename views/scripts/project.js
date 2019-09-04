@@ -119,6 +119,24 @@ $(document).ready(function() {
         displayUnsavedChangesIcon();
     });
 
+    // Flag a tuple
+    $('#project-container').delegate('.flag-tuple', 'click', function(e) {
+        var tupleId = $(this).closest('.tuple-row').data('tuple-id');
+        editingChapter = $(this).closest('.chapter-container').data('chapter-index');
+        editingField = $(this).data('type');
+        editingIndex = project[editingChapter].tuples.findIndex(tuple => tuple.id === tupleId);
+        project[editingChapter].tuples[editingIndex].f = project[editingChapter].tuples[editingIndex].f ? false : true;
+        if(project[editingChapter].tuples[editingIndex].f){
+            $(this).closest('.tuple-row').addClass("flagged");
+        }else{
+            $(this).closest('.tuple-row').removeClass("flagged");
+        }
+
+        
+        
+        displayUnsavedChangesIcon();
+    });
+
     // Edit a tuple
     $('#project-container').delegate('.edit-tuple', 'click', function() {
         var tupleId = $(this).closest('.tuple-row').data('tuple-id');
@@ -214,7 +232,7 @@ function renderProjectTable(project, displayedChapterIndex) {
 
 
     $('#project-table').html(tableBody);
-    $('#chapter_' + displayedChapterIndex).addClass("in");
+    $('#chapter_' + displayedChapterIndex).addClass("in");;
     $('#tuple-count').html(tupleCount);
 
     // Initialize confirmation for delete buttons

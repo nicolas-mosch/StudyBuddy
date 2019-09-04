@@ -14,7 +14,7 @@
       <div class="panel-body" style="width: 100%;">
         <table class="chapter-table" style="width: 100%;">
           {{#each tuples}}
-            <tr data-tuple-id="{{id}}" class="tuple-row">
+            <tr data-tuple-id="{{id}}" class="tuple-row{{#if f}} flagged{{/if}}" >
               <td
                class="content-cell edit-tuple"
                data-type="q"
@@ -37,9 +37,17 @@
                  class="edit-tuple btn"
                  type="button"
                  data-type="p"
-                 title="Edid predefined answer"
+                 title="Edit predefined answer"
                 >
                   <span class="glyphicon glyphicon-list-alt"></span>
+                </button>
+                <button
+                 class="flag-tuple btn"
+                 type="button"
+                 data-type="p"
+                 title="Flag tuple"
+                >
+                  <span class="glyphicon glyphicon-flag"></span>
                 </button>
               </td>
               <td

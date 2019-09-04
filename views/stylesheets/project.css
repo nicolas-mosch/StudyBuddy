@@ -35,3 +35,7 @@ html, body {
 {
   background-color: #e7fff9;
 }
+
+.flagged{
+  background-color: pink;
+}
