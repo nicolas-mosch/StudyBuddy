@@ -27,23 +27,42 @@ const ipc = require("electron").ipcRenderer;
 var quiz, project;
 
 function setNewCurrentTuple() {
-    if(!quiz.remainingTupleIDs.length){
+    console.log(quiz);
+    if(!quiz.remainingTupleIndexes.length){
       renderFinishedQuiz();
       return;
     }
-
-    quiz.currentTupleID = quiz.remainingTupleIDs[
-        Math.floor(Math.random() * (quiz.remainingTupleIDs.length))
+    availableTupleIDs = [];
+    for(i = 0; i < quiz.remainingTupleIndexes.length; ++i){
+      b = true;
+      tuple1 = quiz.allTuples[quiz.remainingTupleIndexes[i]];
+      if('r' in tuple1){
+        for(j = 0; j < tuple1.r.length; ++j){
+          r = tuple1.r[j];
+          for(k = 0; k < quiz.remainingTupleIndexes.length; ++k){
+            if(i == k) continue;
+            tuple2 = quiz.allTuples[quiz.remainingTupleIndexes[k]];
+            if(tuple2.id == r){
+              b = false;
+              break;
+            }
+          }
+        }
+      }
+      if(b) availableTupleIDs.push(quiz.remainingTupleIndexes[i]);
+    }
+    quiz.currentTupleIndex = availableTupleIDs[
+        Math.floor(Math.random() * (availableTupleIDs.length))
     ];
     quiz.currentDisplayType = 'q';
-    CKEDITOR.instances.editor.setData(quiz.allTuples[quiz.currentTupleID].p || "");
+    CKEDITOR.instances.editor.setData(quiz.allTuples[quiz.currentTupleIndex].p || "");
 }
 
 function renderTuple() {
-  $('#qa-container').html(quiz.allTuples[quiz.currentTupleID][quiz.currentDisplayType]);
+  $('#qa-container').html(quiz.allTuples[quiz.currentTupleIndex][quiz.currentDisplayType]);
   $('#toggle-qa').data('display', quiz.currentDisplayType);
   $('#toggle-qa').html(quiz.currentDisplayType === 'q' ? 'Show Answer' : 'Show Question')
-  $('#question-count').html((quiz.allTuples.length - quiz.remainingTupleIDs.length) + "/" + quiz.allTuples.length);
+  $('#question-count').html((quiz.allTuples.length - quiz.remainingTupleIndexes.length) + "/" + quiz.allTuples.length);
   $('span.source-info').tooltip({ //balise.yourClass if you custom plugin
     effect: 'slide',
     trigger: "hover", //This is fine if you have links into tooltip
@@ -52,16 +71,17 @@ function renderTuple() {
 }
 
 function renderFinishedQuiz(){
-  $('#question-count').html((quiz.allTuples.length - quiz.remainingTupleIDs.length) + "/" + quiz.allTuples.length);
+  $('#question-count').html((quiz.allTuples.length - quiz.remainingTupleIndexes.length) + "/" + quiz.allTuples.length);
   $('#quiz-container').html('<h1>You finished the quiz!</h1>');
 }
 
 
 ipc.on('new-quiz', function(event, inProject) {
     project = inProject;
+    console.log(inProject);
     $('#quiz-container').html(
       chapterSelectionTemplate({
-          chapters: inProject
+          chapters: inProject.chapters
       })
     );
 });
@@ -101,7 +121,6 @@ ipc.on('load-quiz', function(event, inQuiz, name) {
 });
 
 $(document).ready(function() {
-
   
     $('#quiz-container').delegate('#toggle-qa', 'click', function() {
         if ($(this).data('display') === 'q') {
@@ -117,11 +136,11 @@ $(document).ready(function() {
     // Remove row from table
     $('#quiz-container').delegate('#correct', 'click', function() {
       quiz.history.push({
-        tupleID: quiz.currentTupleID,
+        tupleID: quiz.allTuples[quiz.currentTupleIndex].id,
         answer: CKEDITOR.instances['editor'].getData(),
         correct: true
       });
-      quiz.remainingTupleIDs.splice(quiz.remainingTupleIDs.indexOf(quiz.currentTupleID), 1);
+      quiz.remainingTupleIndexes.splice(quiz.remainingTupleIndexes.indexOf(quiz.currentTupleIndex), 1);
       setNewCurrentTuple();
       renderTuple();
     });
@@ -129,7 +148,7 @@ $(document).ready(function() {
     // Edit a tuple
     $('#quiz-container').delegate('#incorrect', 'click', function() {
       quiz.history.push({
-        tupleID: quiz.currentTupleID,
+        tupleID: quiz.allTuples[quiz.currentTupleIndex].id,
         correct: false
       });
       setNewCurrentTuple();
@@ -140,21 +159,20 @@ $(document).ready(function() {
     $('#quiz-container').delegate('#start-quiz', 'click', function() {
       const selectedChapters =  $("#chapterSelection").val();
       quiz = {
-          allTuples: project
-          .filter(
+          allTuples: project.chapters.filter(
             (o, i) => {return selectedChapters.includes("" + i)}
           ).map(
             (o) => {return o.tuples}
           ).reduce(
             (accumulatedTuples, currentTuple) => accumulatedTuples.concat(currentTuple)
           ),
-          remainingTupleIDs: [],
+          remainingTupleIndexes: [],
           history: [],
-          currentTupleID: -1,
+          currentTupleIndex: -1,
           currentDisplayType: 'q'
       };
       for (var i in quiz.allTuples) {
-        quiz.remainingTupleIDs.push(i);
+        quiz.remainingTupleIndexes.push(i);
       }
       $('#quiz-container').html(
         quizQuestionTemplate({})

@@ -22,29 +22,28 @@ ipc.on('confirm-project-saved', function(){
 });
 
 ipc.on('load-project', function(event, inProject, name, inProjectPath) {
-    project = inProject;
     projectPath = inProjectPath;
 
     $("#project-title").html(name);
-
+    console.log("inProject", inProject);
     // add tuple-id's to old projects
-    var i, j, chapter, tuple;
-    for(i = 0; i < project.length; i++){
-        chapter = project[i];
-        if (!('currentTupleId' in chapter)){
-            chapter.currentTupleId = 0;
-            for(j = 0; j < chapter.tuples.length; j++){
-                chapter.tuples[j].id = chapter.currentTupleId++;
-            }
+    if (Array.isArray(inProject)){
+        var i, j, id = 0;
+        for(i = 0; i < inProject.length; ++i)
+            for(j = 0; j < inProject[i].tuples.length; j++)
+                    inProject[i].tuples[j].id = id++;
+        project = {
+            chapters: inProject,
+            nextTupleID: id
         }
+    }else{
+        project = inProject;
     }
-    console.log(project);
-
     renderProjectTable(project);
 });
 
 ipc.on('new-project', function(){
-  project = [];
+  project = {chapters: [], nextTupleID: 0};
   editingIndex = -1;
   editingField = null;
   $(".navbar-brand").html("New Project");
@@ -79,7 +78,7 @@ $(document).ready(function() {
         var overridecmd = new CKEDITOR.command(editor, {
             exec: function(editor) {
                 // Replace this with your desired save button code
-                project[editingChapter].tuples[editingIndex][editingField] = editor.document.getBody().getHtml();
+                project.chapters[editingChapter].tuples[editingIndex][editingField] = editor.document.getBody().getHtml();
                 renderProjectTable(project, editingChapter);
 				$('span.source-info').tooltip({ //balise.yourClass if you custom plugin
 					effect: 'slide',
@@ -96,15 +95,15 @@ $(document).ready(function() {
 
     // Add chapter to table
     $('#project-container').delegate('#new-chapter', 'click', function() {
-        project.push({title: $("#new-chapter-title").val(), tuples: [], currentTupleId: 0});
-        renderProjectTable(project, project.length - 1);
+        project.chapters.push({title: $("#new-chapter-title").val(), tuples: [], currentTupleId: 0});
+        renderProjectTable(project, project.chapters.length - 1);
         displayUnsavedChangesIcon();
     });
 
     // Add tuple to table
     $('#project-container').delegate('#new-tuple', 'click', function() {
         var chapterIndex = $(this).closest('.chapter-container').data('chapter-index');
-        project[chapterIndex].tuples.push({q: "", a: "", p: "", id: project[chapterIndex].currentTupleId++});
+        project.chapters[chapterIndex].tuples.push({q: "", a: "", p: "", id: project.nextTupleID++, r: []});
         renderProjectTable(project, chapterIndex);
         displayUnsavedChangesIcon();
     });
@@ -113,9 +112,9 @@ $(document).ready(function() {
     $('#project-container').delegate('.delete-tuple', 'click', function(e) {
         var chapterIndex = $(this).closest('.chapter-container').data('chapter-index');
         var tupleId = $(this).closest('.tuple-row').data('tuple-id');
-        project[chapterIndex].tuples = project[chapterIndex].tuples.filter(tuple => tuple.id !== tupleId);
+        project.chapters[chapterIndex].tuples = project.chapters[chapterIndex].tuples.filter(tuple => tuple.id !== tupleId);
 
-        renderProjectTable(project, $(this).data('chapter-index'));
+        renderProjectTable(project, chapterIndex);
         displayUnsavedChangesIcon();
     });
 
@@ -124,10 +123,10 @@ $(document).ready(function() {
         var tupleId = $(this).closest('.tuple-row').data('tuple-id');
         editingChapter = $(this).closest('.chapter-container').data('chapter-index');
         editingField = $(this).data('type');
-        editingIndex = project[editingChapter].tuples.findIndex(tuple => tuple.id === tupleId);
+        editingIndex = project.chapters[editingChapter].tuples.findIndex(tuple => tuple.id === tupleId);
 
         $('#content-edit-modal').modal('show');
-        CKEDITOR.instances.editor.setData(project[editingChapter].tuples[editingIndex][editingField]);
+        CKEDITOR.instances.editor.setData(project.chapters[editingChapter].tuples[editingIndex][editingField]);
     });
 
     $('#save-project').on('click', function() {
@@ -143,10 +142,35 @@ $(document).ready(function() {
         $("#edit-chapter-" + chapterIndex).show();
     });
 
+    // Edit requirements
+    $('#project-container').delegate('.edit-requirements', 'click', function() {
+        tupleId = $(this).closest('.tuple-row').data('tuple-id');
+        editingChapter = $(this).closest('.chapter-container').data('chapter-index');
+        renderProjectTable(project, editingChapter, tupleId);
+    });
+
+    $('#project-container').delegate('#edit-requirements-done', 'click', function() {
+        requirements = [];
+        $.each($("input[name='required-tuples']:checked"), function(){
+            requirements.push($(this).val());
+        });
+        tupleId = $(this).data('tuple-id');
+        chapterId = $(this).data('chapter-id');
+        tupleIndex = project.chapters[editingChapter].tuples.findIndex(tuple => tuple.id === tupleId);
+        project.chapters[chapterId].tuples[tupleIndex].r = requirements;
+        renderProjectTable(project, chapterId);
+        displayUnsavedChangesIcon();
+    });
+
+    $('#project-container').delegate('#edit-requirements-cancel', 'click', function() {
+        chapterId = $(this).data('chapter-id');
+        renderProjectTable(project, chapterId);
+    });
+
     $('#project-container').delegate('.save-chapter-name', 'click', function() {
         const chapterIndex = parseInt($(this).data('chapter-index'));
         const newTitle = $("#edit-chapter-" + chapterIndex).val();
-        project[chapterIndex].title = newTitle;
+        project.chapters[chapterIndex].title = newTitle;
         $(this).hide();
         $("#edit-chapter-" + chapterIndex).hide();
         $("#edit-chapter-" + chapterIndex).val("");
@@ -161,11 +185,11 @@ $(document).ready(function() {
       var filter = $("#search-input").val().replace(/(ä)/ig, "&auml;").replace(/(ö)/ig, "&ouml;").replace(/(ü)/ig, "&uuml;");
       
       if(filter.length > 0){
-        var filteredProject = [];
+        var filteredProject = {chapters: [], nextTupleID: project.nextTupleID};
         var filteredChapterTuples;
         var aToText, qToText;
-        for(var i = 0; i < project.length; i++){
-            filteredChapterTuples = project[i].tuples.filter(function(tuple){
+        for(var i = 0; i < project.chapters.length; i++){
+            filteredChapterTuples = project.chapters[i].tuples.filter(function(tuple){
                 aToText = tuple.a.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ");
                 qToText = tuple.q.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ");
                 
@@ -176,7 +200,7 @@ $(document).ready(function() {
                 return tuple.a.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ").includes(filter)
                 || tuple.q.replace(/(<([^>]+)>)/ig,"").replace(/(\&nbsp\;)/ig," ").includes(filter);
             });
-            filteredProject.push({title: project[i].title, tuples: filteredChapterTuples});
+            filteredProject.chapters.push({title: project.chapters[i].title, tuples: filteredChapterTuples});
         }
         renderProjectTable(filteredProject);
       }
@@ -202,20 +226,32 @@ $(document).ready(function() {
     */
 });
 
-function renderProjectTable(project, displayedChapterIndex) {
+function renderProjectTable(project, displayedChapterIndex=-1, requirementsOfTupleID=-1) {
+    console.log(project);
     var tableBody = template({
+        editingRequirements: requirementsOfTupleID>=0,
+        requirementsTupleID: requirementsOfTupleID,
         displayedChapter: displayedChapterIndex,
-        chapters: project
+        chapters: project.chapters
     });
 
     var tupleCount = 0;
-    project.forEach(function(chapter, index){tupleCount += chapter.tuples.length})
-
-
+    project.chapters.forEach(function(chapter, index){tupleCount += chapter.tuples.length})
 
     $('#project-table').html(tableBody);
     $('#chapter_' + displayedChapterIndex).addClass("in");
     $('#tuple-count').html(tupleCount);
+
+    if(requirementsOfTupleID >= 0){
+        tupleIndex = project.chapters[editingChapter].tuples.findIndex(tuple => tuple.id === requirementsOfTupleID);
+        if('r' in project.chapters[displayedChapterIndex].tuples[tupleIndex]){
+            project.chapters[displayedChapterIndex].tuples[tupleIndex].r.forEach(function(tupleID){
+                $("#requirement-" + tupleID).prop("checked", true);
+            });
+        }
+        //TODO: avoid requirement cycles
+        $("#requirement-" + requirementsOfTupleID).prop("disabled", true);
+    }
 
     // Initialize confirmation for delete buttons
     $('[data-toggle=confirmation]').confirmation({

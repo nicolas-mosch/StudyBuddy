@@ -14,15 +14,25 @@
       <div class="panel-body" style="width: 100%;">
         <table class="chapter-table" style="width: 100%;">
           {{#each tuples}}
-            <tr data-tuple-id="{{id}}" class="tuple-row">
+            <tr data-tuple-id="{{id}}" class="tuple-row {{#if @root.editingRequirements}}hover-highlight{{/if}}">
               <td
-               class="content-cell edit-tuple"
+               class="content-cell {{#unless @root.editingRequirements}}edit-tuple{{/unless}}"
                data-type="q"
-               title="Edit Question"
+               {{#unless @root.editingRequirements}}title="Edit Question"{{/unless}}
               >
                 {{{q}}}
               </td>
               <td>
+              {{#if @root.editingRequirements}}
+                <input type="checkbox" value="{{id}}" id="requirement-{{id}}" name="required-tuples">
+              {{else}}
+                <button
+                 class="edit-requirements btn"
+                 type="button"
+                 title="Edit tuple requirements"
+                >
+                  <span class="glyphicon glyphicon-random"></span>
+                </button>
                 <button
                  data-toggle="confirmation"
                  data-popout="true"
@@ -37,15 +47,16 @@
                  class="edit-tuple btn"
                  type="button"
                  data-type="p"
-                 title="Edid predefined answer"
+                 title="Edit predefined answer"
                 >
                   <span class="glyphicon glyphicon-list-alt"></span>
                 </button>
+              {{/if}}
               </td>
               <td
-               class="content-cell edit-tuple"
+               class="content-cell {{#unless @root.editingRequirements}}edit-tuple{{/unless}}"
                data-type="a"
-               title="Edit Answer"
+               {{#unless @root.editingRequirements}}title="Edit Answer"{{/unless}}
               >
                 {{{a}}}
               </td>
@@ -62,3 +73,24 @@
   </div>
 {{/each}}
 </div>
+{{#if @root.editingRequirements}}
+<button
+  class="btn"
+  id="edit-requirements-done"
+  type="button"
+  title="Save tuple requirements"
+  data-chapter-id="{{displayedChapter}}"
+  data-tuple-id="{{requirementsTupleID}}"
+>
+  Save Requirements <span class="glyphicon glyphicon-ok-circle"></span>
+</button>
+<button
+  class="btn"
+  id="edit-requirements-cancel"
+  type="button"
+  data-chapter-id="{{displayedChapter}}"
+  title="Cancel tuple requirements"
+>
+  Cancel Requirements <span class="glyphicon glyphicon-remove-circle"></span>
+</button>
+{{/if}}

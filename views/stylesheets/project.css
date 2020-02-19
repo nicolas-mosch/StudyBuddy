@@ -27,11 +27,34 @@ html, body {
 .content-cell
 {
   overflow: auto;
-  cursor: url(./../../resources/edit.png) 2 2, pointer;
   width: 45%;
 }
 
-.content-cell:hover
+.edit-tuple{
+  cursor: url(./../../resources/edit.png) 2 2, pointer;
+}
+
+.edit-tuple:hover
 {
   background-color: #e7fff9;
+}
+
+.hover-highlight:hover
+{
+  background-color: #e7fff9;
+}
+
+#edit-requirements-cancel{
+  position: fixed;
+  top: 20px;
+  right: 150px;
+  background-color: red;
+}
+
+#edit-requirements-done{
+  position: fixed;
+  top: 20px;
+  right: 350px;
+  background-color: green;
+  color: white;
 }
