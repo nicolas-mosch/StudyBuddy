@@ -58,3 +58,7 @@ html, body {
   background-color: green;
   color: white;
 }
+
+.flagged{
+  background-color: pink;
+}

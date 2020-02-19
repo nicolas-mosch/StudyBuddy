@@ -14,7 +14,7 @@
       <div class="panel-body" style="width: 100%;">
         <table class="chapter-table" style="width: 100%;">
           {{#each tuples}}
-            <tr data-tuple-id="{{id}}" class="tuple-row {{#if @root.editingRequirements}}hover-highlight{{/if}}">
+            <tr data-tuple-id="{{id}}" class="tuple-row{{#if @root.editingRequirements}} hover-highlight{{/if}}{{#if f}} flagged{{/if}}">
               <td
                class="content-cell {{#unless @root.editingRequirements}}edit-tuple{{/unless}}"
                data-type="q"
@@ -50,6 +50,14 @@
                  title="Edit predefined answer"
                 >
                   <span class="glyphicon glyphicon-list-alt"></span>
+                </button>
+                <button
+                 class="flag-tuple btn"
+                 type="button"
+                 data-type="p"
+                 title="Flag tuple"
+                >
+                  <span class="glyphicon glyphicon-flag"></span>
                 </button>
               {{/if}}
               </td>
