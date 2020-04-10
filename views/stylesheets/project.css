@@ -20,6 +20,19 @@ html, body {
   overflow: auto;
 }
 
+
+.chapter-table tr{
+  border: 1px dotted black;
+}
+.chapter-table td{
+  border-bottom: 1px dotted black;
+}
+
+.chapter-table{
+  border-spacing: 0 20px;
+  border-collapse: separate;
+}
+
 #new-tuple{
   margin: 0 auto;
 }
@@ -61,4 +74,9 @@ html, body {
 
 .flagged{
   background-color: pink;
+}
+
+.ck-editor__editable_inline {
+  min-height: 400px;
+  min-width: 800px;
 }

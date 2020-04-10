@@ -2,6 +2,7 @@ const $ = require('jquery');
 const handlebars = require('handlebars');
 const fs = require('fs');
 const path = require('path');
+const ClassicEditor = require(path.resolve(__dirname, '../../ckeditor/build/ckeditor'));
 
 global.jQuery = $;
 window.$ = $;
@@ -58,10 +59,63 @@ function displayUnsavedChangesIcon(){
 
 
 $(document).ready(function() {
-    ClassicEditor
-        .create( document.querySelector( '#editor' ) )
-        .then( editor => {
+    ClassicEditor.create( document.querySelector( '#editor' ), {
+		toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'underline',
+                'strikethrough',
+                'highlight',
+                '|',
+                'fontFamily',
+                'fontBackgroundColor',
+                'fontColor',
+                'fontSize',
+                '|',
+                'bulletedList',
+                'numberedList',
+                'indent',
+                'outdent',
+                '|',
+                'imageUpload',
+                'blockQuote',
+                'insertTable',
+                'mediaEmbed',
+                'undo',
+                'redo',
+                '|',
+                'codeBlock',
+                'code',
+                'link',
+                'specialCharacters',
+                'horizontalLine'
+            ]
+        },
+        language: 'en',
+        image: {
+            toolbar: [
+                'imageTextAlternative',
+                'imageStyle:full',
+                'imageStyle:side'
+            ]
+        },
+        table: {
+            contentToolbar: [
+                'tableColumn',
+                'tableRow',
+                'mergeTableCells',
+                'tableProperties'
+            ]
+        },
+        licenseKey: '',
+        
+    } ).then( editor => {
             ckeditor = editor;
+            console.log(ckeditor);
+            ckeditor.ui.view.editable.editableElement.style.height = '300px';
         } )
         .catch( error => {
             console.error( error );
