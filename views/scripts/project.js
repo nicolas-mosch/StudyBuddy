@@ -1,7 +1,7 @@
-var $ = require('jquery');
-var handlebars = require('handlebars');
-var fs = require('fs');
-var path = require('path');
+const $ = require('jquery');
+const handlebars = require('handlebars');
+const fs = require('fs');
+const path = require('path');
 
 global.jQuery = $;
 window.$ = $;
@@ -15,6 +15,7 @@ var project = [];
 var editingIndex, editingChapter = -1;
 var editingField = null;
 var projectPath = null;
+var ckeditor;
 
 ipc.on('confirm-project-saved', function(){
     $('#save-project span').removeClass('glyphicon-floppy');
@@ -57,41 +58,15 @@ function displayUnsavedChangesIcon(){
 
 
 $(document).ready(function() {
-    CKEDITOR.on('instanceReady', function(ev) {
-        // bootstrap-ckeditor-modal-fix.js
-        // hack to fix ckeditor/bootstrap compatiability bug when ckeditor appears in a bootstrap modal dialog
-
-        $.fn.modal.Constructor.prototype.enforceFocus = function() {
-            modal_this = this
-            $(document).on('focusin.modal', function(e) {
-                if (
-                    modal_this.$element[0] !== e.target
-                    && !modal_this.$element.has(e.target).length
-                    && $(e.target.parentNode).hasClass('cke_contents cke_reset')) {
-                    modal_this.$element.focus()
-                }
-            })
-        };
-
-        // Create a new command with the desired exec function
-        var editor = ev.editor;
-        var overridecmd = new CKEDITOR.command(editor, {
-            exec: function(editor) {
-                // Replace this with your desired save button code
-                project.chapters[editingChapter].tuples[editingIndex][editingField] = editor.document.getBody().getHtml();
-                renderProjectTable(project, editingChapter);
-				$('span.source-info').tooltip({ //balise.yourClass if you custom plugin
-					effect: 'slide',
-					trigger: "hover", //This is fine if you have links into tooltip
-					html: true, //Set false if you disable ckeditor textarea
-                });
-                displayUnsavedChangesIcon();
-            }
-        });
-        // Replace the old save's exec function with the new one
-        ev.editor.commands.save.exec = overridecmd.exec;
-    });
-    CKEDITOR.replace('editor');
+    ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+        .then( editor => {
+            ckeditor = editor;
+        } )
+        .catch( error => {
+            console.error( error );
+        })
+    ;
 
     // Add chapter to table
     $('#project-container').delegate('#new-chapter', 'click', function() {
@@ -140,11 +115,23 @@ $(document).ready(function() {
         editingIndex = project.chapters[editingChapter].tuples.findIndex(tuple => tuple.id === tupleId);
 
         $('#content-edit-modal').modal('show');
-        CKEDITOR.instances.editor.setData(project.chapters[editingChapter].tuples[editingIndex][editingField]);
+        ckeditor.setData(project.chapters[editingChapter].tuples[editingIndex][editingField]);
     });
 
     $('#save-project').on('click', function() {
         ipc.send('save-project', project, projectPath);
+    });
+
+    // ctrl+s
+    $(document).on("keypress", function(e) { 
+        if( e.ctrlKey && ( e.which === 19 ) ){
+            if($('#content-edit-modal').hasClass('in')){
+                project.chapters[editingChapter].tuples[editingIndex][editingField] = ckeditor.getData();
+                renderProjectTable(project, editingChapter);
+            }else{
+                ipc.send('save-project', project, projectPath);
+            }
+        }
     });
 
     // Rename a chapter
