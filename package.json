@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/nicolas-mosch/StudyAssistron#readme",
   "devDependencies": {
-    "electron": "^1.6.2"
+    "electron": "^9.1.0"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
