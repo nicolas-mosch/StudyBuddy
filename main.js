@@ -129,6 +129,34 @@ var template = [{
 
                   mainWindow.loadURL('file://' + __dirname + '/views/layouts/quiz.html');
                 }
+            },
+            {
+                label: 'View Results',
+                click: function(item, focusedWindow) {
+                  var path = dialog.showOpenDialog({
+                      title: 'View Results',
+                      defaultPath: '.',
+                      filters: [{
+                          name: 'StudyAssistron Quiz',
+                          extensions: ['saq']
+                      }],
+                      properties: ['openFile']
+                  });
+
+                  if(!path){
+                    return;
+                  }
+
+                  var fileContents = fs.readFileSync(path[0], "utf-8");
+                  var fileName = path[0].split('\\');
+                  fileName = fileName[fileName.length - 1];
+                
+                  mainWindow.webContents.on('did-finish-load', function() {
+                      mainWindow.webContents.send('view-quiz', JSON.parse(fileContents), fileName);
+                  });
+
+                  mainWindow.loadURL('file://' + __dirname + '/views/layouts/quiz-view.html');
+                }
             }
         ]
     },

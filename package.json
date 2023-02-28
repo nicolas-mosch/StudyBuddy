@@ -1,23 +1,47 @@
 {
   "name": "studyassistron",
   "productName": "Study Buddy",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A tool to help you create flashcard-like question-answer sets for any subject, and quiz yourself.",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron . ",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pack": "build --dir",
-    "dist": "build",
-    "release": "build"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "build": {
-    "win": {
-      "icon": "resources/icon"
+    "appId": "timetracker",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
     },
-    "mac": {
-      "icon": "resources/icon"
-    }
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "resources/icon.png"
+    },
+    "extraResources": [
+      {
+        "from": "data",
+        "to": "data"
+      }
+    ]
   },
   "repository": {
     "type": "git",
@@ -30,21 +54,17 @@
   },
   "homepage": "https://github.com/nicolas-mosch/StudyAssistron#readme",
   "devDependencies": {
-    "electron": "^1.6.2"
+    "electron": "^22.0.3",
+    "electron-builder": "^22.10.3",
+    "electron-reload": "^2.0.0-alpha.1"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
     "bootstrap-confirmation2": "^2.4.0",
-    "electron-updater": "^2.2.2",
     "handlebars": "^4.0.6",
     "jquery": "^3.1.1",
     "mathjax": "^2.7.1",
     "mathjax-node": "^2.0.1",
     "nconf": "^0.8.4"
-  },
-  "unused": {
-    "devDependencies": {
-      "electron-builder": "^18.6.2"
-    }
   }
 }
