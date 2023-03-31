@@ -1,4 +1,4 @@
-# StudyAssistron
+# StudyBuddy
 
 A tool to help you create flashcard-like question-answer sets for the subject you want, and quiz yourself.
 
