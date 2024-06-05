@@ -55,16 +55,17 @@
   "homepage": "https://github.com/nicolas-mosch/StudyAssistron#readme",
   "devDependencies": {
     "electron": "^22.0.3",
-    "electron-builder": "^22.10.3",
+    "electron-builder": "^25.0.0-alpha.9",
     "electron-reload": "^2.0.0-alpha.1"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
     "bootstrap-confirmation2": "^2.4.0",
+    "electron-updater": "^6.3.0-alpha.4",
     "handlebars": "^4.0.6",
     "jquery": "^3.1.1",
     "mathjax": "^2.7.1",
     "mathjax-node": "^2.0.1",
-    "nconf": "^0.8.4"
+    "nconf": "^0.12.1"
   }
 }
