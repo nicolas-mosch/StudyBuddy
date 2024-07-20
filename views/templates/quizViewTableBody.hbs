@@ -1,0 +1,24 @@
+<div class="panel-group" id="accordion" style="width: 100%;">
+  <div class="panel panel-default" style="width: 100%;">
+    <div class="panel-body" style="width: 100%;">
+      <table class="chapter-table" style="width: 100%;">
+        {{#each history}}
+          <tr data-tuple-id="{{id}}" class="tuple-row{{#if @root.editingRequirements}} hover-highlight{{/if}}{{#if f}} flagged{{/if}}">
+            <td
+              class="content-cell {{#unless @root.editingRequirements}}edit-tuple{{/unless}}"
+              data-type="q"
+            >
+              {{{q}}}
+            </td>
+            <td
+              class="content-cell {{#unless @root.editingRequirements}}edit-tuple{{/unless}}"
+              data-type="a"
+            >
+              {{{answer}}}
+            </td>
+          </tr>
+        {{/each}}
+      </table>
+    </div>
+  </div>
+</div>

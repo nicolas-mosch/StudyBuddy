@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Study Assist</title>
+    <script>
+    </script>
+    <script src="../scripts/index.js"></script>
+    <script src="../scripts/quiz-view.js"></script>
+    <script src="../../ckeditor/ckeditor.js"></script>
+    <link rel='stylesheet' href='../stylesheets/project.css' />
+    <link rel='stylesheet' href='../../ckeditor/plugins/eqneditor/css/style.css' />
+    <link rel='stylesheet' href='../../node_modules/bootstrap/dist/css/bootstrap.min.css' />
+</head>
+
+<body>
+  <div id="project-container">
+    <div id="project-table-container">
+        <div id="project-table"></div>
+        <br />
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="content-edit-modal" role="dialog" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Insert Content</h4>
+              </div>
+              <div class="modal-body">
+                  <form>
+                      <textarea name="editor" id="editor" rows="10" cols="80"></textarea>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</body>
+
+</html>
