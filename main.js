@@ -208,21 +208,21 @@ ipcMain.on('save-project', function(message, project, path) {
         });
     }
 
+    
     if(!path){
-      return;
+        return;
     }
-
+    
     if (!path.endsWith('.sap')) {
         path += '.sap';
     }
-
-    fs.writeFileSync(path, JSON.stringify(project), function(inError) {
-        if (inError) {
-            console.error(inError);
-            return;
-        }
+    
+    try{
+        fs.writeFileSync(path, JSON.stringify(project));
         mainWindow.webContents.send('confirm-project-saved');
-    });
+    }catch(err){
+        console.error(err);
+    }
 });
 
 // Quit when all windows are closed.

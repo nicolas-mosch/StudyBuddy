@@ -16,7 +16,8 @@ var editingIndex, editingChapter = -1;
 var editingField = null;
 var projectPath = null;
 
-ipc.on('confirm-project-saved', function(){
+ipc.on('confirm-project-saved', function(event){
+    console.log("Batman");
     $('#save-project span').removeClass('glyphicon-floppy');
     $('#save-project span').addClass('glyphicon-floppy-saved');
 });
@@ -77,7 +78,7 @@ $(document).ready(function() {
         var editor = ev.editor;
         var overridecmd = new CKEDITOR.command(editor, {
             exec: function(editor) {
-                // Replace this with your desired save button code
+                // Save button code
                 project.chapters[editingChapter].tuples[editingIndex][editingField] = editor.document.getBody().getHtml();
                 renderProjectTable(project, editingChapter);
 				$('span.source-info').tooltip({ //balise.yourClass if you custom plugin
@@ -86,6 +87,7 @@ $(document).ready(function() {
 					html: true, //Set false if you disable ckeditor textarea
                 });
                 displayUnsavedChangesIcon();
+                ipc.send('save-project', project, projectPath);
             }
         });
         // Replace the old save's exec function with the new one
