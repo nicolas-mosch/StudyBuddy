@@ -49,7 +49,7 @@ var template = [{
             {
                 label: 'Open Project',
                 click: function(item, focusedWindow) {
-                    var path = dialog.showOpenDialog({
+                    var path = dialog.showOpenDialogSync({
                         title: 'Open Q&A Set',
                         defaultPath: '.',
                         filters: [{
@@ -82,7 +82,7 @@ var template = [{
         submenu: [{
                 label: 'New Quiz',
                 click: function(item, focusedWindow) {
-                  var path = dialog.showOpenDialog({
+                  var path = dialog.showOpenDialogSync({
                       title: 'New Quiz of Project(s)',
                       defaultPath: '.',
                       filters: [{
@@ -105,7 +105,7 @@ var template = [{
             {
                 label: 'Load Quiz',
                 click: function(item, focusedWindow) {
-                  var path = dialog.showOpenDialog({
+                  var path = dialog.showOpenDialogSync({
                       title: 'Load Quiz',
                       defaultPath: '.',
                       filters: [{
@@ -133,7 +133,7 @@ var template = [{
             {
                 label: 'View Results',
                 click: function(item, focusedWindow) {
-                  var path = dialog.showOpenDialog({
+                  var path = dialog.showOpenDialogSync({
                       title: 'View Results',
                       defaultPath: '.',
                       filters: [{
@@ -178,7 +178,7 @@ ipcMain.on('new-project', function() {
 ipcMain.on('save-quiz', function(message, quiz) {
   //  TODO: save button should save to open quiz directly if one is open
 
-    var path = dialog.showSaveDialog({
+    var path = dialog.showSaveDialogSync({
         title: 'Save Quiz'
     });
 
@@ -190,7 +190,7 @@ ipcMain.on('save-quiz', function(message, quiz) {
         path += '.saq';
     }
 
-    fs.writeFile(path, JSON.stringify(quiz), function(inError) {
+    fs.writeFileSync(path, JSON.stringify(quiz), function(inError) {
         if (inError) {
             console.error(inError);
             return;
@@ -203,26 +203,26 @@ ipcMain.on('save-quiz', function(message, quiz) {
 ipcMain.on('save-project', function(message, project, path) {
   //  TODO: save button should save to open project directly if one is open
     if(path == null){
-        path = dialog.showSaveDialog({
+        path = dialog.showSaveDialogSync({
             title: 'Save Project'
         });
     }
 
+    
     if(!path){
-      return;
+        return;
     }
-
+    
     if (!path.endsWith('.sap')) {
         path += '.sap';
     }
-
-    fs.writeFile(path, JSON.stringify(project), function(inError) {
-        if (inError) {
-            console.error(inError);
-            return;
-        }
+    
+    try{
+        fs.writeFileSync(path, JSON.stringify(project));
         mainWindow.webContents.send('confirm-project-saved');
-    });
+    }catch(err){
+        console.error(err);
+    }
 });
 
 // Quit when all windows are closed.
@@ -239,7 +239,11 @@ app.on('ready', function() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 800,
-        height: 600
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        }
     });
 
     // add F5 reload shortcut for reloading window
